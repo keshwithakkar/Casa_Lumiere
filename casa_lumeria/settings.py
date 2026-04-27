@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'casa_lumeria.wsgi.application'
 import dj_database_url
 
 DATABASES = {
-    'default': dj_database_url.config(default='')
+    'default': dj_database_url.config()
 }
 
 
@@ -144,3 +144,8 @@ LOGIN_URL = 'login'
 import os
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+import dj_database_url
+
+DATABASES['default']['CONN_MAX_AGE'] = 600
+DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
