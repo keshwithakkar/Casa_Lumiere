@@ -1,0 +1,1 @@
+web: gunicorn casa_lumeria.wsgi
