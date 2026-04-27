@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 
+import os
+import dj_database_url
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,11 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0f&3-b#=ad@4bswa$%79!#u1r&4h!r#p-*&34$vszk!4wc$%4l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-
-DEBUG = False
-
-# ALLOWED_HOSTS = []
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -90,10 +89,8 @@ WSGI_APPLICATION = 'casa_lumeria.wsgi.application'
 #     }
 # }
 
-import dj_database_url
-
 DATABASES = {
-    'default': dj_database_url.config()
+    'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
 }
 
 
@@ -134,6 +131,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR / 'static']
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -141,11 +140,4 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 
-import os
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-import dj_database_url
-
-DATABASES['default']['CONN_MAX_AGE'] = 600
-DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
