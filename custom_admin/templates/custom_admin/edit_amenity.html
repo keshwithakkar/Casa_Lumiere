@@ -1,0 +1,41 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<h1 style="color:#854f6c;">Edit Amenity</h1>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+    {% csrf_token %}
+
+    <label>Name</label>
+    <input type="text" name="name" value="{{ amenity.name }}" required>
+
+    <label>Category</label>
+    <div style="display:flex; align-items:center; gap:30px; margin-top:8px;">
+        <label style="display:flex; align-items:center; gap:6px;">
+            <input type="radio" name="category" value="Indoor"
+                {% if amenity.category == "Indoor" %}checked{% endif %}>
+            Indoor
+        </label>
+        <label style="display:flex; align-items:center; gap:6px;">
+            <input type="radio" name="category" value="Outdoor"
+                {% if amenity.category == "Outdoor" %}checked{% endif %}>
+            Outdoor
+        </label>
+
+    </div>
+
+    <label>Image</label>
+    <input type="file" name="image">
+
+    {% if amenity.image %}
+        <br><br>
+        <img src="{{ amenity.image.url }}" width="120" style="border-radius:8px;">
+    {% endif %}
+
+    <br><br>
+    <button type="submit" class="btn-add">Edit Amenity</button>
+    <a href="{% url 'admin_amenities' %}" class="btn-cancel">Cancel</a>
+</form>
+
+{% endblock %}

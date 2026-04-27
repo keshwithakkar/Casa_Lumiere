@@ -1,0 +1,24 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<h1 style="color:#854f6c;">Edit Registered Guest</h1>
+
+<form method="POST" class="admin-form">
+    {% csrf_token %}
+
+    <label>Username</label>
+    <input type="text" name="username" value="{{ user.username }}" required>
+
+    <label>Email</label>
+    <input type="email" name="email" value="{{ user.email }}" required>
+
+    <label>Password</label>
+    <input type="text" name="password" value="XXXX" readonly><br><br>
+
+    <button type="submit" class="btn-edit">Edit Guest</button>
+    <a href="{% url 'admin_registered_users' %}" class="btn-cancel">Cancel</a>
+
+</form>
+
+{% endblock %}

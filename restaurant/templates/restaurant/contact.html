@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Casa Lumière | Resort & Spa</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'restaurant/css/contact.css' %}">
+</head>
+<body>
+
+    <!-- HOME IMAGE -->
+    <section class="home-image">
+        <div class="slideshow">
+            <img src="{% static 'restaurant/images/home.png' %}" class="slide active">
+            <img src="{% static 'restaurant/images/home2.png' %}" class="slide">
+        </div>
+
+        <script>
+            let slides = document.querySelectorAll(".slide");
+            let current = 0;
+
+            function changeSlide() {
+                slides[current].classList.remove("active");
+                current = (current + 1) % slides.length;
+                slides[current].classList.add("active");
+            }
+
+            setInterval(changeSlide, 2000); // changes every 4 seconds
+        </script>
+
+        <div class="logo-overlay">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'restaurant/images/hero.png' %}" alt="Casa Lumière Logo">
+            </a>
+        </div>
+
+        <!-- HAMBURGER MENU BUTTON -->
+        <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- SIDE NAVIGATION -->
+        <nav class="side-nav" id="sideNav">
+            <div class="close-btn" onclick="toggleMenu()">×</div>
+            {% if request.session.username %}
+                <span class="welcome-text">Welcome, {{ request.session.username }}</span>
+            {% endif %}
+
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about_us' %}">About Us</a></li>
+                <li><a href="{% url 'amenities' %}">Amenities</a></li>
+                <li><a href="{% url 'rooms' %}">Accommodation</a></li>
+                <li><a href="{% url 'my_bookings' %}">My Bookings</a></li>
+                <li><a href="{% url 'restaurant_page' %}">Restaurant</a></li>
+                <li><a href="{% url 'gallery' %}">Gallery</a></li>
+                <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                <li><a href="{% url 'faq' %}">FAQ</a></li>
+                <li><a href="{% url 'testimonial' %}">Testimonials</a></li>
+                <li><a href="{% url 'terms' %}">Terms & Conditions</a></li>
+                <li><a href="{% url 'manage_profile' %}">Manage Profile</a></li>
+                <div class="auth-links">
+                    {% if request.session.username %}
+                        <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn">Logout</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <span style="color: #fbe4d8;">|</span>
+                        <a href="{% url 'signup' %}">Signup</a>
+                    {% endif %}
+                </div>
+            </ul>
+        </nav>
+
+        <script>
+            function toggleMenu() {
+                const sideNav = document.getElementById("sideNav");
+                const menuToggle = document.getElementById("menuToggle");
+
+                sideNav.classList.toggle("active");
+
+                // Hide hamburger when menu is open
+                if (sideNav.classList.contains("active")) {
+                    menuToggle.style.display = "none";
+                } else {
+                    menuToggle.style.display = "block";
+                }
+            }
+        </script>
+
+    </section>
+
+    <!-- CONTACT HEADING -->
+    <section class="contact-heading-section">
+        <h2>Contact Us</h2>
+    </section>
+
+    <!-- CONTACT INFO BOX -->
+    <section class="contact-info-section">
+        <div class="contact-info-box">
+            {% if contact %}
+                <p>{{ contact.description|safe }}</p>
+            {% else %}
+                <p>Contact details will be available soon.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- REACH US FORM -->
+    <section class="reach-us-section" id="reach-us">
+        <h3 class="reach-heading">Reach Us</h3>
+
+        {% if request.GET.success %}
+            <div class="success-msg">
+                Your enquiry has been submitted successfully. We’ll get back to you shortly.
+            </div>
+        {% endif %}
+
+        <form class="reach-form" method="POST" action="{% url 'contact' %}">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="tel" name="phone" placeholder="Phone Number" required>
+
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+
+
+
+</body>
+</html>

@@ -1,0 +1,603 @@
+/* GLOBAL RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY */
+body {
+    background-color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    color: #000000; /* black */
+}
+
+/* HOME IMAGE */
+.home-image {
+    position: relative;
+}
+
+/* SLIDESHOW CONTAINER */
+.slideshow {
+    position: relative;
+    width: 100%;
+    height: 40vh;   /* reduced from 85vh */
+    overflow: hidden;
+}
+
+/* SLIDE IMAGES */
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 40vh;   /* reduced from 85vh */
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+/* FIRST IMAGE VISIBLE */
+.slide.active {
+    opacity: 1;
+}
+
+/* LOGO OVERLAY */
+.logo-overlay {
+    position: fixed;
+    top: 20px;
+    right: -20px;
+    max-width: 200px;
+    width: 16vw;
+    min-width: 120px;
+    z-index: 2000;   /* important */
+}
+
+.logo-overlay img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.25));
+}
+
+/* HAMBURGER BUTTON */
+.menu-toggle {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 2001;   /* higher than side nav */
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 30px;
+    height: 3px;
+    background-color: #854f6c;
+    margin: 6px 0;
+    transition: 0.3s;
+}
+
+/* SIDE NAV */
+.side-nav {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    height: 100vh;
+    background-color: #854f6c;
+    padding: 80px 30px;
+    transition: left 0.4s ease;
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* OPEN STATE */
+.side-nav.active {
+    left: 0;
+}
+
+/* CLOSE BUTTON */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 32px;
+    color: #fbe4d8;
+    cursor: pointer;
+}
+
+/* NAV LINKS */
+.side-nav ul {
+    list-style: none;
+    flex: 1;
+}
+
+.side-nav li {
+    margin-bottom: 25px;
+}
+
+.side-nav a {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #fbe4d8;
+    text-decoration: none;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
+
+.side-nav a:hover {
+    color: #ffffff;
+    padding-left: 8px;
+}
+
+.auth-links {
+    margin-top: auto;   /* pushes it to bottom properly */
+    padding: 20px 0;
+    text-align: center;
+    font-size: 15px;
+}
+
+.auth-links a {
+    color: #fbe4d8;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+.welcome-text {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    color: white;
+}
+
+.logout-btn {
+    background: none;
+    margin-top: -25px;
+    border: none;
+    color: #fbe4d8;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.logout-btn:hover {
+    color: #ffffff;
+    padding-left: 8px;
+    text-decoration: underline;
+    transition: all 0.3s ease;
+}
+
+/* BOOK HEADING */
+.book-heading-section {
+    padding: 30px 0 50px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.book-heading-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    color: #854f6c; /* purple */
+}
+
+/* BOOKING SECTION */
+.booking-section {
+    padding: 40px 10%;
+    background: #faf7f9;
+}
+
+/* CONTAINER */
+.booking-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* BOOKING CARD */
+.booking-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    border-left: 6px solid #854f6c;
+}
+
+.booking-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* HEADER */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.card-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: #854f6c;
+}
+
+/* CARD BODY FLEX LAYOUT */
+.card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* LEFT SIDE INFO */
+.booking-info {
+    flex: 1;
+}
+
+/* RIGHT SIDE CANCEL */
+.cancel-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+/* STATUS BADGE */
+.status {
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.status.upcoming {
+    background-color: #e6f4ea;
+    color: #2e7d32;
+}
+
+.status.completed {
+    background-color: #eeeeee;
+    color: #777;
+}
+
+/* BODY INFO */
+.booking-info p {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* CANCEL BUTTON */
+.cancel-btn {
+    padding: 10px 28px;
+    background-color: #854f6c;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.cancel-btn:hover {
+    background-color: #6d3f58;
+    transform: translateY(-2px);
+}
+
+/* NO BOOKING TEXT */
+.no-booking {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+}
+
+/* CONTACT SECTION */
+.contact-section {
+    margin-top: 50px;
+    padding: 10px 0;   /* reduced vertical space, no side padding */
+}
+
+/* PURPLE FOOTER BOX */
+.contact-box {
+    background-color: #854f6c; /* purple */
+    border-radius: 0;          /* full-width footer look */
+    padding: 50px 80px;
+    width: 100%;               /* full width */
+    margin: 0;                 /* remove centering gap */
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+/* COLUMN 1 : LOGO */
+.logo-col img {
+    width: 220px;
+    max-width: 100%;
+}
+
+/* COLUMN 2 : CONTACT INFO */
+.contact-info {
+    font-family: 'Poppins', sans-serif;
+    color: #fbe4d8;
+}
+
+.contact-info h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.contact-info p {
+    font-size: 20px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+}
+
+/* COLUMN 3 : MAP + BUTTON */
+.contact-action {
+    text-align: center;
+}
+
+.contact-action img {
+    width: 100%;
+    max-width: 420px;   /* increased size */
+    border-radius: 16px;
+    margin-bottom: 24px;
+}
+
+/* BOOK NOW BUTTON */
+.book-now-wrapper {
+    text-align: center;
+    margin: 20px 0 40px;
+}
+
+.book-now-btn {
+    padding: 14px 46px;
+    background-color: #fbe4d8;
+    color: #854f6c;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 30px;
+    border: 2px solid #854f6c;
+    transition: all 0.3s ease;
+}
+
+.book-now-btn:hover {
+    background-color: #854f6c;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* SEND INQUIRY BUTTON (reuse style) */
+.inquiry-btn {
+    background-color: #fbe4d8;  /* pink */
+    color: #854f6c;            /* purple */
+    transition: all 0.3s ease;
+}
+
+.inquiry-btn:hover {
+    background-color: #fbe4d8de;  /* purple */
+}
+
+
+/* BOOK NOW BUTTON */
+.book-now-wrapper {
+    text-align: center;
+    margin: 20px 0 40px;
+}
+
+.book-now-btn {
+    padding: 14px 46px;
+    background-color: #fbe4d8;
+    color: #854f6c;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 30px;
+    border: 2px solid #854f6c;
+    transition: all 0.3s ease;
+}
+
+.book-now-btn:hover {
+    background-color: #854f6c;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+
+
+.booking-section{
+padding:40px 0 60px;
+}
+
+.booking-container{
+max-width:1000px;
+margin:auto;
+display:flex;
+flex-direction:column;
+gap:25px;
+}
+
+/* CARD */
+
+.booking-card{
+
+background:#fff;
+
+border-radius:16px;
+
+padding:28px;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.07);
+
+transition:0.3s;
+
+border:1px solid #f1e7ec;
+
+}
+
+.booking-card:hover{
+transform:translateY(-4px);
+box-shadow:0 18px 35px rgba(0,0,0,0.1);
+}
+
+/* HEADER */
+
+.card-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.card-header h3{
+font-family:'Playfair Display',serif;
+font-size:24px;
+color:#854f6c;
+}
+
+/* STATUS BADGE */
+
+.status{
+padding:6px 14px;
+border-radius:30px;
+font-size:13px;
+font-weight:500;
+}
+
+.status.upcoming{
+background:#e6f4ea;
+color:#2e7d32;
+}
+
+.status.completed{
+background:#eeeeee;
+color:#666;
+}
+
+.status.cancelled{
+background:#fdecea;
+color:#c62828;
+}
+
+/* BODY */
+
+.card-body{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:30px;
+border-top:1px solid #f2e9ee;
+padding-top:20px;
+}
+
+/* BOOKING INFO GRID */
+
+.booking-info{
+flex:1;
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:16px 40px;
+
+}
+
+.booking-info label{
+font-size:13px;
+color:#777;
+}
+
+.booking-info p{
+font-size:15px;
+margin-top:2px;
+}
+
+.price{
+font-weight:600;
+color:#854f6c;
+}
+
+/* CANCEL BUTTON */
+
+.cancel-wrapper{
+display:flex;
+align-items:center;
+}
+
+.cancel-btn{
+
+background:#854f6c;
+
+color:white;
+
+border:none;
+
+padding:10px 24px;
+
+border-radius:30px;
+
+font-size:14px;
+
+cursor:pointer;
+
+transition:0.3s;
+
+}
+
+.cancel-btn:hover{
+background:#6d3f58;
+transform:translateY(-2px);
+}
+
+/* NO BOOKINGS */
+
+.no-booking{
+text-align:center;
+font-size:18px;
+color:#777;
+padding:40px;
+}
+
+/* INVOICE BUTTON */
+
+.invoice-wrapper{
+display:flex;
+align-items:center;
+}
+
+.invoice-btn{
+
+background:#854f6c;
+
+color:white;
+
+border:none;
+
+padding:10px 24px;
+
+border-radius:30px;
+
+font-size:14px;
+
+cursor:pointer;
+
+transition:0.3s;
+
+text-decoration: none;
+
+}
+
+.invoice-btn:hover{
+background:#6d3f58;
+transform:translateY(-2px);
+}

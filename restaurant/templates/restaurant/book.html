@@ -1,0 +1,373 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Casa Lumière | Resort & Spa</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'restaurant/css/book.css' %}">
+</head>
+<body>
+
+    <!-- HOME IMAGE -->
+    <section class="home-image">
+
+        <div class="logo-overlay">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'restaurant/images/hero.png' %}" alt="Casa Lumière Logo">
+            </a>
+        </div>
+
+        <!-- HAMBURGER MENU BUTTON -->
+        <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- SIDE NAVIGATION -->
+        <nav class="side-nav" id="sideNav">
+            <div class="close-btn" onclick="toggleMenu()">×</div>
+            {% if request.session.username %}
+                <span class="welcome-text">Welcome, {{ request.session.username }}</span>
+            {% endif %}
+
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about_us' %}">About Us</a></li>
+                <li><a href="{% url 'amenities' %}">Amenities</a></li>
+                <li><a href="{% url 'rooms' %}">Accommodation</a></li>
+                <li><a href="{% url 'my_bookings' %}">My Bookings</a></li>
+                <li><a href="{% url 'restaurant_page' %}">Restaurant</a></li>
+                <li><a href="{% url 'gallery' %}">Gallery</a></li>
+                <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                <li><a href="{% url 'faq' %}">FAQ</a></li>
+                <li><a href="{% url 'testimonial' %}">Testimonials</a></li>
+                <li><a href="{% url 'terms' %}">Terms & Conditions</a></li>
+                <li><a href="{% url 'manage_profile' %}">Manage Profile</a></li>
+                <div class="auth-links">
+                    {% if request.session.username %}
+                        <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn">Logout</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <span style="color: #fbe4d8;">|</span>
+                        <a href="{% url 'signup' %}">Signup</a>
+                    {% endif %}
+                </div>
+            </ul>
+        </nav>
+
+        <script>
+            function toggleMenu() {
+                const sideNav = document.getElementById("sideNav");
+                const menuToggle = document.getElementById("menuToggle");
+
+                sideNav.classList.toggle("active");
+
+                // Hide hamburger when menu is open
+                if (sideNav.classList.contains("active")) {
+                    menuToggle.style.display = "none";
+                } else {
+                    menuToggle.style.display = "block";
+                }
+            }
+        </script>
+    </section>
+
+    <!-- BOOK HEADING -->
+    <section class="book-heading-section">
+        <h2>Booking Details</h2>
+    </section>
+
+    <!-- ================= BOOKING SECTION ================= -->
+
+    <section class="booking-section">
+        <form method="POST" class="booking-container">
+            {% csrf_token %}
+
+            <!-- LEFT SIDE -->
+            <div class="left-panel">
+
+                <h2 class="section-title">Guest Details</h2>
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Contact Number</label>
+                    <input type="tel" name="phone" required>
+                </div>
+
+                <h2 class="section-title coupon-title">Have a Coupon?</h2>
+
+                <div class="coupon-box">
+                    <input type="text" id="couponInput" name="coupon" placeholder="Enter coupon code">
+                    <button type="button" onclick="applyCoupon()">Apply</button>
+                    <span id="couponMessage" class="coupon-message"></span>
+                </div>
+
+            </div>
+
+            {% csrf_token %}
+
+            <!-- ================= HIDDEN SECTION ================= -->
+            <input type="hidden" name="room" value="{{ room }}">
+            <input type="hidden" name="checkin" value="{{ checkin }}">
+            <input type="hidden" name="checkout" value="{{ checkout }}">
+            <input type="hidden" name="adults" value="{{ adults }}">
+            <input type="hidden" name="children" value="{{ children }}">
+            <input type="hidden" name="rooms" value="{{ rooms }}">
+
+            <input type="hidden" name="room_price" id="hiddenRoomPrice">
+            <input type="hidden" name="extra_guest_price" id="hiddenExtraGuest">
+            <input type="hidden" name="tax_price" id="hiddenTax">
+            <input type="hidden" name="discount_price" id="hiddenDiscount">
+            <input type="hidden" name="total_price" id="hiddenTotal">
+            <input type="hidden" name="currency" value="{{ currency }}">
+
+            <!-- RIGHT SIDE -->
+            <div class="right-panel">
+
+                <h2 class="room-title">{{ room }}</h2>
+                <p class="room-sub">Inclusive Breakfast</p>
+
+                <div class="summary-bar">
+                    <div>
+                        <span>Check-In</span>
+                        <p>{{ checkin }}</p>
+                    </div>
+                    <div>
+                        <span>Check-Out</span>
+                        <p>{{ checkout }}</p>
+                    </div>
+                    <div>
+                        <span>Rooms</span>
+                        <p>{{ rooms }}</p>
+                    </div>
+                    <div>
+                        <span>Guests</span>
+                        <p>{{ adults }} Adults <br/> {{ children }} Children</p>
+                    </div>
+                    <div class="price-box">
+                        <span>Price Per Room</span>
+                        <p id="roomPrice">
+                            {% if currency == "EUR" %}
+                                € {{ price|floatformat:2 }}
+                            {% else %}
+                                ₹ {{ price }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="price-breakdown">
+                    <div class="left">
+                        <p>Room Price</p>
+                        <p>Extra Guest</p>
+                        <p>Tax (18%)</p>
+                        <p id="discountLabel" style="display:none;">Discount (15%)</p>
+                        <p><strong>Total</strong></p>
+                    </div>
+                    <div class="right">
+                        <p id="roomBasePrice">INR 0</p>
+                        <p id="childCharge">INR 0</p>
+                        <p id="taxAmount">INR 0</p>
+                        <p id="discountAmount" style="display:none;">INR 0</p>
+                        <p id="totalPrice"><strong>INR 0</strong></p>
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+
+                        const currency = "{{ currency|default:'INR' }}";
+
+                        // Price coming from URL is already in the correct currency
+                        let priceText = "{{ price|default:'0' }}".replace(/,/g, "").trim();
+                        let roomPricePerNight = parseFloat(priceText) || 0;
+
+                        let children      = parseInt("{{ children|default:0 }}") || 0;
+                        let roomsSelected = parseInt("{{ rooms|default:1 }}") || 1;
+
+                        // Calculate nights
+                        let checkinDate   = new Date("{{ checkin }}");
+                        let checkoutDate  = new Date("{{ checkout }}");
+                        let timeDiff      = checkoutDate - checkinDate;
+                        let nights        = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                        if (nights <= 0) nights = 1;
+
+                        // Calculations (all in selected currency now)
+                        let roomTotal    = roomPricePerNight*roomsSelected;
+                        
+                        let extraGuestPrice = 1000; // base price in INR
+
+                        // convert to EUR if needed
+                        if (currency === "EUR") {
+                            extraGuestPrice = extraGuestPrice / 90;   // same conversion rate used earlier
+                        }
+
+                        let childCharge = children * extraGuestPrice * nights * roomsSelected;
+
+                        let subtotal     = roomTotal + childCharge;
+                        let tax          = subtotal * 0.18;
+                        let discount     = 0;
+
+                        function formatCurrency(amount) {
+                            if (currency === "EUR") {
+                                return "€ " + amount.toFixed(2);
+                            } else {
+                                return "₹ " + amount.toLocaleString("en-IN", {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                });
+                            }
+                        }
+
+                        function updateUI() {
+                            document.getElementById("roomBasePrice").innerText = formatCurrency(roomTotal);
+                            document.getElementById("childCharge").innerText = formatCurrency(childCharge);
+                            document.getElementById("taxAmount").innerText = formatCurrency(tax);
+
+                            let finalTotal = subtotal + tax - discount;
+
+                            document.getElementById("totalPrice").innerHTML =
+                                "<strong>" + formatCurrency(finalTotal) + "</strong>";
+
+                            document.getElementById("roomPrice").innerText =
+                                formatCurrency(roomPricePerNight);
+
+                            // 👇 SAVE VALUES FOR DJANGO
+                            document.getElementById("hiddenRoomPrice").value = roomTotal;
+                            document.getElementById("hiddenExtraGuest").value = childCharge;
+                            document.getElementById("hiddenTax").value = tax;
+                            document.getElementById("hiddenDiscount").value = discount;
+                            document.getElementById("hiddenTotal").value = finalTotal;
+                        }
+
+                        window.applyCoupon = function () {
+                            const couponInput = document.getElementById("couponInput").value.trim();
+                            const couponMessage = document.getElementById("couponMessage");
+                            const discountLabel = document.getElementById("discountLabel");
+                            const discountAmountEl = document.getElementById("discountAmount");
+
+                            if (couponInput === "LUMIERE15") {
+                                discount = (subtotal + tax) * 0.15;
+
+                                discountLabel.style.display = "block";
+                                discountAmountEl.style.display = "block";
+                                discountAmountEl.innerText = formatCurrency(discount);
+
+                                couponMessage.innerText = "Coupon Applied";
+                                couponMessage.style.color = "green";
+                            } else {
+                                discount = 0;
+                                discountLabel.style.display = "none";
+                                discountAmountEl.style.display = "none";
+
+                                couponMessage.innerText = "Invalid Coupon";
+                                couponMessage.style.color = "red";
+                            }
+
+                            updateUI();
+                        };
+                        // Initial render
+                        updateUI();
+                    });
+                </script>
+
+                <button type="button" class="confirm-btn" onclick="validateAndOpenPopup()">
+                    Confirm Booking
+                </button>
+
+                <!-- BOOKING CONFIRM POPUP -->
+                <div class="popup-overlay" id="confirmPopup">
+                    <div class="popup-box">
+                        <h2>Booking Confirmation</h2>
+                        <p>
+                            Thank you for choosing <strong>Casa Lumière</strong>.<br>
+                            Your reservation has been successfully confirmed.<br>
+                        </p>
+
+                        <div class="popup-buttons">
+                            <button class="popup-confirm" onclick="submitBooking('home')">Back To Home</button>
+                            <button class="popup-confirm" onclick="submitBooking('invoice')">View Invoice</button>
+                        </div>
+                        <input type="hidden" name="action_type" id="actionType">
+                    </div>
+                </div>
+
+                <script>
+                    function validateAndOpenPopup() {
+                        const form = document.querySelector(".booking-container");
+
+                        if (form.checkValidity()) {
+                            document.getElementById("confirmPopup").classList.add("active");
+                        } else {
+                            form.reportValidity(); 
+                        }
+                    }
+
+                    function submitBooking(action) {
+                        document.getElementById("actionType").value = action;
+                        document.querySelector(".booking-container").submit();
+                    }
+                </script>
+
+            </div>
+        </form>
+    </section>
+
+    <script>
+    function openPopup() {
+        document.getElementById("bookingPopup").classList.add("active");
+    }
+    </script>
+
+
+    <!-- CONTACT / FOOTER BOX -->
+    <section class="contact-section">
+        <div class="contact-box">
+
+            <!-- COLUMN 1 : LOGO -->
+            <div class="contact-col logo-col">
+                <img src="{% static 'restaurant/images/hero.png' %}" alt="Casa Lumière Logo">
+            </div>
+
+            <!-- COLUMN 2 : CONTACT INFO -->
+            <div class="contact-col contact-info">
+                <h4>Contact Info</h4><br>
+                <p>
+                    Casa Lumière<br>
+                    Via della Luce 18,<br>
+                    Porto Aurelio District,<br>
+                    20121 Milan, Italy
+                </p>
+                <p>
+                    +39 02 8899 7401<br>
+                    enquiry@casalumiere.com
+                </p>
+            </div>
+
+            <!-- COLUMN 3 : MAP + BUTTON -->
+            <div class="contact-col contact-action">
+                <img src="{% static 'restaurant/images/map.png' %}" alt="Location Map">
+
+                <a href="{% url 'contact' %}" class="book-now-btn inquiry-btn">Send Enquiry</a>
+            </div>
+
+        </div>
+    </section>
+
+</body>
+</html>

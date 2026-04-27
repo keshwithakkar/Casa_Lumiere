@@ -1,0 +1,77 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<h1 style="color:#854f6c;">Add Booking</h1>
+
+<form method="POST" class="admin-form">
+    {% csrf_token %}
+
+    <label>Guest</label>
+    <select name="guest" required>
+        {% for g in guests %}
+        <option value="{{ g.id }}">{{ g.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Room</label>
+    <select name="room" required>
+        {% for r in rooms %}
+        <option value="{{ r.id }}">{{ r.room_type }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Check-In</label>
+    <input type="date" name="check_in" required>
+
+    <label>Check-Out</label>
+    <input type="date" name="check_out" required>
+
+    <label>Adults</label>
+    <input type="number" name="adults" min="1" value="1" required>
+
+    <label>Children</label>
+    <input type="number" name="children" min="0" value="0">
+
+    <label>Rooms Booked</label>
+    <input type="number" name="rooms_booked" min="1" value="1" required>
+
+    <label>Room Price</label>
+    <input type="number" name="room_price" step="0.01" required>
+
+    <label>Extra Guest Price</label>
+    <input type="number" name="extra_guest_price" step="0.01" value="0">
+
+    <label>Tax Price</label>
+    <input type="number" name="tax_price" step="0.01" required>
+
+    <label>Discount Price</label>
+    <input type="number" name="discount_price" step="0.01" value="0">
+
+    <label>Total Price</label>
+    <input type="number" name="total_price" step="0.01" required>
+
+    <label>Coupon Code</label>
+    <input type="text" name="coupon_code">
+
+    <label>Status</label>
+    <div style="display:flex; align-items:center; gap:30px; margin-top:8px;">
+        <label style="display:flex; align-items:center; gap:6px;">
+            <input type="radio" name="booking_status" value="Confirmed" required>
+            Confirm
+        </label>
+        <label style="display:flex; align-items:center; gap:6px;">
+            <input type="radio" name="booking_status" value="Cancelled">
+            Cancel
+        </label>
+        <label style="display:flex; align-items:center; gap:6px;">
+            <input type="radio" name="booking_status" value="Completed">
+            Completed
+        </label>
+    </div>
+
+    <button type="submit" class="btn-add">Save Booking</button>
+    <a href="{% url 'admin_bookings' %}" class="btn-cancel">Cancel</a>
+</form>
+
+{% endblock %}

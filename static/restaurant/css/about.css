@@ -1,0 +1,558 @@
+/* GLOBAL RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY */
+body {
+    background-color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    color: #000000; /* black */
+}
+
+/* HOME IMAGE */
+.about-image {
+    position: relative;
+}
+
+/* SLIDESHOW CONTAINER */
+.slideshow {
+    position: relative;
+    width: 100%;
+    height: 85vh;
+    overflow: hidden;
+}
+
+/* SLIDE IMAGES */
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 85vh;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+/* FIRST IMAGE VISIBLE */
+.slide.active {
+    opacity: 1;
+}
+
+/* LOGO OVERLAY */
+.logo-overlay {
+    position: fixed;
+    top: 20px;
+    right: -20px;
+    max-width: 200px;
+    width: 16vw;
+    min-width: 120px;
+    z-index: 2000;   /* important */
+}
+
+.logo-overlay img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.25));
+}
+
+/* HAMBURGER BUTTON */
+.menu-toggle {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 2001;   /* higher than side nav */
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 30px;
+    height: 3px;
+    background-color: #854f6c;
+    margin: 6px 0;
+    transition: 0.3s;
+}
+
+/* SIDE NAV */
+.side-nav {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    height: 100vh;
+    background-color: #854f6c;
+    padding: 80px 30px;
+    transition: left 0.4s ease;
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* OPEN STATE */
+.side-nav.active {
+    left: 0;
+}
+
+/* CLOSE BUTTON */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 32px;
+    color: #fbe4d8;
+    cursor: pointer;
+}
+
+/* NAV LINKS */
+.side-nav ul {
+    list-style: none;
+    flex: 1;
+}
+
+.side-nav li {
+    margin-bottom: 25px;
+}
+
+.side-nav a {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #fbe4d8;
+    text-decoration: none;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
+
+.side-nav a:hover {
+    color: #ffffff;
+    padding-left: 8px;
+}
+
+.auth-links {
+    margin-top: auto;   /* pushes it to bottom properly */
+    padding: 20px 0;
+    text-align: center;
+    font-size: 15px;
+}
+
+.auth-links a {
+    color: #fbe4d8;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+.welcome-text {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    color: white;
+}
+
+.logout-btn {
+    background: none;
+    margin-top: -25px;
+    border: none;
+    color: #fbe4d8;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.logout-btn:hover {
+    color: #ffffff;
+    padding-left: 8px;
+    text-decoration: underline;
+    transition: all 0.3s ease;
+}
+
+/* SECTION 1: Heading + Tagline */
+.about-heading-tagline {
+    padding: 30px 0 50px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.about-heading-tagline h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    color: #854f6c; /* purple */
+}
+
+.about-heading-tagline .about-tagline {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    color: #000000;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* SECTION 2: Subheading + Description */
+.about-subheading-desc .about-subheading {
+    font-family: 'Playfair Display', serif; /* cursive */
+    font-size: 36px;
+    color: #854f6c; /* purple */
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.about-subheading-desc .about-description {
+    font-family: 'Poppins', sans-serif; /* normal */
+    font-size: 23px;
+    line-height: 1.8;
+    color: #000000;
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto; /* center horizontally */
+}
+
+/* ACCOMMODATION SECTION */
+.accommodation-section {
+    padding: 50px 40px 60px;
+    background-color: #ffffff;
+}
+
+/* SUBHEADING */
+.accommodation-subheading {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    color: #854f6c;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* CONTENT FLEX */
+.accommodation-content {
+    display: flex;
+    align-items: center;       /* vertical center */
+    gap: 60px;
+    max-width: 1500px;
+    margin: 0 auto;
+    flex-wrap: wrap;           /* responsive for smaller screens */
+}
+
+/* LEFT IMAGE */
+.accommodation-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;   /* center image horizontally */
+}
+
+.accommodation-left img {
+    width: 100%;                /* smaller image */
+    height: auto;
+    border-radius: 70px;
+    object-fit: cover;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.accommodation-left img:hover {
+    transform: scale(1.05); /* slightly enlarge */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); /* deeper shadow */
+}
+
+/* RIGHT TEXT */
+.accommodation-right {
+    flex: 2.2;                 /* wider text */
+}
+
+.accommodation-right p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 26px;
+    line-height: 1.8;
+    color: #000000;
+    text-align: left;          /* left-aligned text */
+}
+
+/* SIGNATURE DINING SECTION */
+.signature-dining-section {
+    padding: 50px 40px 60px;
+    background-color: #ffffff;
+}
+
+/* SUBHEADING */
+.signature-dining-subheading {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    color: #854f6c;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* CONTENT FLEX */
+.signature-dining-content {
+    display: flex;
+    align-items: center;       /* vertical center */
+    gap: 60px;
+    max-width: 1500px;
+    margin: 0 auto;
+    flex-wrap: wrap;           /* responsive */
+}
+
+/* LEFT IMAGE */
+.signature-dining-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.signature-dining-left img {
+    width: 100%;               /* smaller image */
+    height: auto;
+    border-radius: 70px;
+    object-fit: cover;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.signature-dining-left img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* RIGHT TEXT */
+.signature-dining-right {
+    flex: 2.2;                 /* wider text */
+}
+
+.signature-dining-right p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 26px;
+    line-height: 1.8;
+    color: #000000;
+    text-align: left;          /* left-aligned text */
+}
+
+/* SPA & WELLNESS RETREAT SECTION */
+.spa-section {
+    padding: 50px 40px 60px;
+    background-color: #ffffff;
+}
+
+/* SUBHEADING */
+.spa-subheading {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    color: #854f6c;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* CONTENT FLEX */
+.spa-content {
+    display: flex;
+    align-items: center;       /* vertical center */
+    gap: 60px;
+    max-width: 1500px;
+    margin: 0 auto;
+    flex-wrap: wrap;           /* responsive */
+}
+
+/* LEFT IMAGE */
+.spa-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.spa-left img {
+    width: 100%;               /* smaller image */
+    height: auto;
+    border-radius: 70px;
+    object-fit: cover;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.spa-left img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* RIGHT TEXT */
+.spa-right {
+    flex: 2.2;                 /* wider text */
+}
+
+.spa-right p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 26px;
+    line-height: 1.8;
+    color: #000000;
+    text-align: left;          /* left-aligned text */
+}
+
+/* WORLD-CLASS AMENITIES SECTION */
+.amenities-section {
+    padding: 50px 40px 60px;
+    background-color: #ffffff;
+}
+
+/* SUBHEADING */
+.amenities-subheading {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    color: #854f6c;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* CONTENT FLEX */
+.amenities-content {
+    display: flex;
+    align-items: center;       /* vertical center */
+    gap: 60px;
+    max-width: 1500px;
+    margin: 0 auto;
+    flex-wrap: wrap;           /* responsive */
+}
+
+/* LEFT IMAGE */
+.amenities-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.amenities-left img {
+    width: 100%;               /* responsive size */
+    height: auto;
+    border-radius: 70px;
+    object-fit: cover;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.amenities-left img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* RIGHT TEXT */
+.amenities-right {
+    flex: 2.2;                 /* wider text */
+}
+
+.amenities-right p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 26px;
+    line-height: 1.8;
+    color: #000000;
+    text-align: left;          /* left-aligned text */
+}
+
+/* MOMENTS THAT LAST SECTION */
+.moments-section {
+    padding: 50px 40px 70px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+/* HEADING */
+.moments-heading {
+    font-family: 'Playfair Display', serif; /* cursive */
+    font-size: 42px;
+    color: #854f6c; /* purple */
+    margin-bottom: 20px;
+}
+
+/* DESCRIPTION */
+.moments-description {
+    font-family: 'Poppins', sans-serif; /* normal */
+    font-size: 24px;
+    line-height: 1.8;
+    color: #000000;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* CONTACT SECTION */
+.contact-section {
+    padding: 10px 0;   /* reduced vertical space, no side padding */
+}
+
+/* PURPLE FOOTER BOX */
+.contact-box {
+    background-color: #854f6c; /* purple */
+    border-radius: 0;          /* full-width footer look */
+    padding: 50px 80px;
+    width: 100%;               /* full width */
+    margin: 0;                 /* remove centering gap */
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+/* COLUMN 1 : LOGO */
+.logo-col img {
+    width: 220px;
+    max-width: 100%;
+}
+
+/* COLUMN 2 : CONTACT INFO */
+.contact-info {
+    font-family: 'Poppins', sans-serif;
+    color: #fbe4d8;
+}
+
+.contact-info h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.contact-info p {
+    font-size: 20px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+}
+
+/* COLUMN 3 : MAP + BUTTON */
+.contact-action {
+    text-align: center;
+}
+
+.contact-action img {
+    width: 100%;
+    max-width: 420px;   /* increased size */
+    border-radius: 16px;
+    margin-bottom: 24px;
+}
+
+/* SEND INQUIRY BUTTON (reuse style) */
+.book-now-wrapper {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.book-now-btn {
+    display: inline-block;
+    padding: 16px 50px;
+    background-color: #fbe4d8;
+    color: #854f6c;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border-radius: 30px;
+    border: 2px solid #854f6c;
+    transition: all 0.3s ease;
+}
+
+.inquiry-btn {
+    background-color: #fbe4d8;  /* pink */
+    color: #854f6c;            /* purple */
+    transition: all 0.3s ease;
+}
+
+.inquiry-btn:hover {
+    background-color: #fbe4d8de;  /* purple */
+}

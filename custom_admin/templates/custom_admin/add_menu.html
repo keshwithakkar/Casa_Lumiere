@@ -1,0 +1,35 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<h1 style="color:#854f6c;">Add Menu Item</h1>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+    {% csrf_token %}
+
+    <!-- Restaurant Name -->
+    <label>Restaurant</label>
+    <select name="restaurant" required>
+        {% for r in restaurants %}
+            <option value="{{ r.restaurant_id }}">{{ r.name }}</option>
+        {% endfor %}
+    </select>
+
+    <!-- Item Name -->
+    <label>Item Name</label>
+    <input type="text" name="item_name" required>
+
+    <!-- Description -->
+    <label>Description</label>
+    <textarea name="description" required></textarea>
+
+    <!-- Image -->
+    <label>Image</label>
+    <input type="file" name="image" required>
+
+    <button type="submit" class="btn-add">Save Item</button>
+    <a href="{% url 'admin_menu' %}" class="btn-cancel">Cancel</a>
+
+</form>
+
+{% endblock %}

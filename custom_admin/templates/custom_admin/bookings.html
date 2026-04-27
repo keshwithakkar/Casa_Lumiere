@@ -1,0 +1,80 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1 style="font-weight:800;">Bookings</h1>
+    <a href="{% url 'admin_add_booking' %}" class="btn-add">+ Add Booking</a>
+</div>
+
+<form method="get">
+    <select name="status" onchange="this.form.submit()" style="padding:8px;">
+        <option value="">Select Status</option>
+        <option value="Confirmed" {% if selected_status == "Confirmed" %}selected{% endif %}>Confirmed</option>
+        <option value="Cancelled" {% if selected_status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+        <option value="Completed" {% if selected_status == "Completed" %}selected{% endif %}>Completed</option>
+        <option value="all" {% if selected_status == "all" %}selected{% endif %}>All</option>
+    </select>
+</form>
+
+<div class="table-scroll">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Guest</th>
+                <th>Room</th>
+                <th>Check-In</th>
+                <th>Check-Out</th>
+                <th>Adults</th>
+                <th>Children</th>
+                <th>Rooms Booked</th>
+                <th>Room Price</th>
+                <th>Extra Guest Price</th>
+                <th>Tax Price</th>
+                <th>Discount Price</th>
+                <th>Total Price</th>
+                <th>Coupon Code</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for b in bookings %}
+            <tr>
+                <td>{{ b.id }}</td>
+                <td>{{ b.guest.name }}</td>
+                <td>{{ b.room.room_type }}</td>
+                <td>{{ b.check_in }}</td>
+                <td>{{ b.check_out }}</td>
+                <td>{{ b.adults }}</td>
+                <td>{{ b.children }}</td>
+                <td>{{ b.rooms_booked }}</td>
+                <td>INR {{ b.room_price }}</td>
+                <td>INR {{ b.extra_guest_price }}</td>
+                <td>INR {{ b.tax_price }}</td>
+                <td>INR {{ b.discount_price }}</td>
+                <td>INR {{ b.total_price }}</td>
+                <td>{{ b.coupon_code }}</td>
+                <td>{{ b.booking_status }}</td>
+                <td>
+                    <div class="action-buttons">
+                        <a href="{% url 'admin_edit_booking' b.id %}" class="btn-edit">Edit</a>
+                        <form action="{% url 'admin_delete_booking' b.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-delete">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="10" style="text-align:center;">No bookings found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

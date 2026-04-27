@@ -1,0 +1,35 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<h1 style="color:#854f6c;">Add Room</h1>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+    {% csrf_token %}
+
+    <label>Room Type</label>
+    <select name="room_type" required>
+        <option value="">Select Room Type</option>
+        <option value="Casa Suite">Casa Suite</option>
+        <option value="Deluxe">Deluxe</option>
+        <option value="Executive">Executive</option>
+    </select>
+
+    <label>Description</label>
+    <textarea name="description" rows="4" required></textarea>
+
+    <label>Price (₹)</label>
+    <input type="number" name="price" step="0.01" required>
+
+    <label>Total Rooms</label>
+    <input type="number" name="total_rooms" required>
+
+    <label>Room Image</label>
+    <input type="file" name="image" required>
+
+    <button type="submit" class="btn-add">Save Room</button>
+    <a href="{% url 'admin_rooms' %}" class="btn-cancel">Cancel</a>
+
+</form>
+
+{% endblock %}

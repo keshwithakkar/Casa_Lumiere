@@ -1,0 +1,29 @@
+{% extends 'custom_admin/base.html' %}
+{% block content %}
+
+<div class="profile-container">
+
+    <div class="profile-box">
+        <h2>Manage Profile</h2>
+
+        {% if message %}
+            <p class="success">{{ message }}</p>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Username</label>
+            <input type="text" name="username" value="{{ admin.username }}" required>
+
+            <label>New Password</label>
+            <input type="password" name="password" placeholder="Leave blank to keep same">
+
+            <button type="submit" style="width: 523px;">Update Profile</button>
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'custom_admin/base.html' %}
+{% block content %}
+
+<h1 style="color:#854f6c;">Edit Gallery Image</h1>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+    {% csrf_token %}
+
+    <label>Category</label>
+    <div style="display:flex; gap:25px; margin-top:8px; flex-wrap:wrap;">
+        <label>
+            <input type="radio" name="category_name" value="The Grandeur"
+                {% if gallery.category_name == "The Grandeur" %}checked{% endif %}>
+            The Grandeur
+        </label>
+
+        <label>
+            <input type="radio" name="category_name" value="Elegant Stays"
+                {% if gallery.category_name == "Elegant Stays" %}checked{% endif %}>
+            Elegant Stays
+        </label>
+
+        <label>
+            <input type="radio" name="category_name" value="The Wellness"
+                {% if gallery.category_name == "The Wellness" %}checked{% endif %}>
+            The Wellness
+        </label>
+
+        <label>
+            <input type="radio" name="category_name" value="The Leisure"
+                {% if gallery.category_name == "The Leisure" %}checked{% endif %}>
+            The Leisure
+        </label>
+
+        <label>
+            <input type="radio" name="category_name" value="The Experience"
+                {% if gallery.category_name == "The Experience" %}checked{% endif %}>
+            The Experience
+        </label>
+    </div>
+
+    <label style="margin-top:15px;">Image</label>
+    <input type="file" name="image">
+
+    {% if gallery.image %}
+        <br><br>
+        <img src="{{ gallery.image.url }}" width="120" style="border-radius:8px;">
+    {% endif %}
+    <br><br>
+
+    <button type="submit" class="btn-add">Edit Image</button>
+    <a href="{% url 'admin_gallery' %}" class="btn-cancel">Cancel</a>
+</form>
+
+{% endblock %}

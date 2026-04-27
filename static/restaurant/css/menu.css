@@ -1,0 +1,346 @@
+/* GLOBAL RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY */
+body {
+    background-color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    color: #000000; /* black */
+}
+
+/* HOME IMAGE */
+.home-image {
+    position: relative;
+}
+
+/* SLIDESHOW CONTAINER */
+.slideshow {
+    position: relative;
+    width: 100%;
+    height: 85vh;
+    overflow: hidden;
+}
+
+/* SLIDE IMAGES */
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 85vh;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+/* FIRST IMAGE VISIBLE */
+.slide.active {
+    opacity: 1;
+}
+
+/* LOGO OVERLAY */
+.logo-overlay {
+    position: fixed;
+    top: 20px;
+    right: -20px;
+    max-width: 200px;
+    width: 16vw;
+    min-width: 120px;
+    z-index: 2000;   /* important */
+}
+
+.logo-overlay img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.25));
+}
+
+/* HAMBURGER BUTTON */
+.menu-toggle {
+    position: fixed;
+    top: 30px;
+    left: 30px;
+    z-index: 2001;   /* higher than side nav */
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 30px;
+    height: 3px;
+    background-color: #854f6c;
+    margin: 6px 0;
+    transition: 0.3s;
+}
+
+/* SIDE NAV */
+.side-nav {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 300px;
+    height: 100vh;
+    background-color: #854f6c;
+    padding: 80px 30px;
+    transition: left 0.4s ease;
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* OPEN STATE */
+.side-nav.active {
+    left: 0;
+}
+
+/* CLOSE BUTTON */
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 32px;
+    color: #fbe4d8;
+    cursor: pointer;
+}
+
+/* NAV LINKS */
+.side-nav ul {
+    list-style: none;
+    flex: 1;
+}
+
+.side-nav li {
+    margin-bottom: 25px;
+}
+
+.side-nav a {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #fbe4d8;
+    text-decoration: none;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
+
+.side-nav a:hover {
+    color: #ffffff;
+    padding-left: 8px;
+}
+
+.auth-links {
+    margin-top: auto;   /* pushes it to bottom properly */
+    padding: 20px 0;
+    text-align: center;
+    font-size: 15px;
+}
+
+.auth-links a {
+    color: #fbe4d8;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+.welcome-text {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    color: white;
+}
+
+.logout-btn {
+    background: none;
+    margin-top: -25px;
+    border: none;
+    color: #fbe4d8;
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.logout-btn:hover {
+    color: #ffffff;
+    padding-left: 8px;
+    text-decoration: underline;
+    transition: all 0.3s ease;
+}
+
+/* RESTAURANT HEADING BELOW AMENITIES */
+.restaurant-heading-section {
+    padding: 30px 0 50px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.restaurant-heading-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    color: #854f6c; /* purple */
+}
+
+/* menu */
+.menu-section{
+    text-align:center;
+    padding:80px 20px;
+}
+
+.menu-section h2{
+    color:#854f6c;
+    margin-bottom:40px;
+}
+
+.menu-item{
+    margin:20px 0;
+    font-size:18px;
+}
+
+.menu-section{
+padding:80px 60px;
+background:#fbe4d8;
+}
+
+.menu-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+}
+
+.menu-card{
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 6px 18px rgba(0,0,0,0.1);
+transition:0.3s;
+text-align:center;
+padding-bottom:20px;
+}
+
+.menu-card:hover{
+transform:translateY(-8px);
+}
+
+.menu-card img{
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+.menu-card h3{
+font-family:'Playfair Display',serif;
+color:#854f6c;
+margin:15px 0 5px;
+}
+
+.menu-card p{
+font-size:14px;
+padding:0 15px;
+color:#555;
+}
+
+.price{
+display:block;
+margin-top:10px;
+font-weight:600;
+color:#854f6c;
+font-size:16px;
+}
+
+/* CONTACT SECTION */
+.contact-section {
+    padding: 10px 0;   /* reduced vertical space, no side padding */
+}
+
+/* PURPLE FOOTER BOX */
+.contact-box {
+    background-color: #854f6c; /* purple */
+    border-radius: 0;          /* full-width footer look */
+    padding: 50px 80px;
+    width: 100%;               /* full width */
+    margin: 0;                 /* remove centering gap */
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+/* COLUMN 1 : LOGO */
+.logo-col img {
+    width: 220px;
+    max-width: 100%;
+}
+
+/* COLUMN 2 : CONTACT INFO */
+.contact-info {
+    font-family: 'Poppins', sans-serif;
+    color: #fbe4d8;
+}
+
+.contact-info h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.contact-info p {
+    font-size: 20px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+}
+
+/* COLUMN 3 : MAP + BUTTON */
+.contact-action {
+    text-align: center;
+}
+
+.contact-action img {
+    width: 100%;
+    max-width: 420px;   /* increased size */
+    border-radius: 16px;
+    margin-bottom: 24px;
+}
+
+/* SEND INQUIRY BUTTON (reuse style) */
+.book-now-wrapper {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.book-now-btn {
+    display: inline-block;
+    padding: 16px 50px;
+    background-color: #fbe4d8;
+    color: #854f6c;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border-radius: 30px;
+    border: 2px solid #854f6c;
+    transition: all 0.3s ease;
+}
+
+.book-now-btn:hover {
+    background-color: #854f6c;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.inquiry-btn {
+    background-color: #fbe4d8;  /* pink */
+    color: #854f6c;            /* purple */
+    transition: all 0.3s ease;
+}
+
+.inquiry-btn:hover {
+    background-color: #854f6c;  /* purple */
+}

@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Casa Lumière Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'custom_admin/css/admin.css' %}">
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <img src="{% static 'restaurant/images/hero.png' %}" alt="Logo">
+        <h2>Casa Lumière</h2>
+    </div>
+    <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+    <a href="{% url 'admin_amenities' %}">Amenities</a>
+    <a href="{% url 'admin_gallery' %}">Gallery</a>
+    <a href="{% url 'admin_restaurant' %}">Restaurant</a>
+    <a href="{% url 'admin_menu' %}">Menu</a>
+    <a href="{% url 'admin_rooms' %}">Rooms</a>
+    <a href="{% url 'admin_guests' %}">Guests</a>
+    <a href="{% url 'admin_bookings' %}">Bookings</a>
+    <a href="{% url 'admin_coupon' %}">Coupon</a>
+    <a href="{% url 'admin_registered_users' %}">Registered Guests</a>
+    <a href="{% url 'admin_testimonials' %}">Testimonials</a>
+    <a href="{% url 'admin_faqs' %}">FAQs</a>
+    <a href="{% url 'admin_contactus' %}">Contact Us</a>
+    <a href="{% url 'admin_enquiries' %}">Enquiries</a>
+    <a href="{% url 'admin_profile' %}">Manage Profile</a>
+    <a href="{% url 'admin_logout' %}">Logout</a>
+</div>
+
+<div class="main-content">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

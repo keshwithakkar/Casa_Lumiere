@@ -1,0 +1,41 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<h1 style="color:#854f6c;">Edit Room</h1>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+    {% csrf_token %}
+
+    <label>Room Type</label>
+    <select name="room_type" required>
+        <option value="Casa Suite" {% if room.room_type == "Casa Suite" %}selected{% endif %}>Casa Suite</option>
+        <option value="Deluxe" {% if room.room_type == "Deluxe" %}selected{% endif %}>Deluxe</option>
+        <option value="Executive" {% if room.room_type == "Executive" %}selected{% endif %}>Executive</option>
+    </select>
+
+    <label>Description</label>
+    <textarea name="description" rows="4" required>{{ room.description }}</textarea>
+
+    <label>Price (₹)</label>
+    <input type="number" name="price" step="0.01" value="{{ room.price }}" required>
+
+    <label>Total Rooms</label>
+    <input type="number" name="total_rooms" value="{{ room.total_rooms }}" required>
+
+    <label>Current Image</label>
+    {% if room.image %}
+        <div style="margin:10px 0;">
+            <img src="{{ room.image.url }}" width="120" style="border-radius:8px;">
+        </div>
+    {% endif %}
+
+    <label>Change Image</label>
+    <input type="file" name="image">
+
+    <button type="submit" class="btn-edit">Edit Room</button>
+    <a href="{% url 'admin_rooms' %}" class="btn-cancel">Cancel</a>
+
+</form>
+
+{% endblock %}

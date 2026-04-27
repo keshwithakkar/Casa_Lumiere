@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Casa Lumière | Resort & Spa</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'restaurant/css/amenities.css' %}">
+</head>
+<body>
+
+    <!-- HOME IMAGE -->
+    <section class="home-image">
+        <div class="slideshow">
+            <img src="{% static 'restaurant/images/home.png' %}" class="slide active">
+            <img src="{% static 'restaurant/images/home2.png' %}" class="slide">
+        </div>
+
+        <script>
+            let slides = document.querySelectorAll(".slide");
+            let current = 0;
+
+            function changeSlide() {
+                slides[current].classList.remove("active");
+                current = (current + 1) % slides.length;
+                slides[current].classList.add("active");
+            }
+
+            setInterval(changeSlide, 2000); // changes every 4 seconds
+        </script>
+
+        <div class="logo-overlay">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'restaurant/images/hero.png' %}" alt="Casa Lumière Logo">
+            </a>
+        </div>
+
+        <!-- HAMBURGER MENU BUTTON -->
+        <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- SIDE NAVIGATION -->
+        <nav class="side-nav" id="sideNav">
+            <div class="close-btn" onclick="toggleMenu()">×</div>
+            {% if request.session.username %}
+                <span class="welcome-text">Welcome, {{ request.session.username }}</span>
+            {% endif %}
+
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about_us' %}">About Us</a></li>
+                <li><a href="{% url 'amenities' %}">Amenities</a></li>
+                <li><a href="{% url 'rooms' %}">Accommodation</a></li>
+                <li><a href="{% url 'my_bookings' %}">My Bookings</a></li>
+                <li><a href="{% url 'restaurant_page' %}">Restaurant</a></li>
+                <li><a href="{% url 'gallery' %}">Gallery</a></li>
+                <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                <li><a href="{% url 'faq' %}">FAQ</a></li>
+                <li><a href="{% url 'testimonial' %}">Testimonials</a></li>
+                <li><a href="{% url 'terms' %}">Terms & Conditions</a></li>
+                <li><a href="{% url 'manage_profile' %}">Manage Profile</a></li>
+                <div class="auth-links">
+                    {% if request.session.username %}
+                        <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn">Logout</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <span style="color: #fbe4d8;">|</span>
+                        <a href="{% url 'signup' %}">Signup</a>
+                    {% endif %}
+                </div>
+            </ul>
+        </nav>
+
+        <script>
+            function toggleMenu() {
+                const sideNav = document.getElementById("sideNav");
+                const menuToggle = document.getElementById("menuToggle");
+
+                sideNav.classList.toggle("active");
+
+                // Hide hamburger when menu is open
+                if (sideNav.classList.contains("active")) {
+                    menuToggle.style.display = "none";
+                } else {
+                    menuToggle.style.display = "block";
+                }
+            }
+        </script>
+    </section>
+
+    <!-- SECTION 1: Heading -->
+    <section class="amenities-heading">
+        <h2>Amenities</h2>
+    </section>
+
+    <!-- SECTION 2: Indoor Amenities -->
+    <section class="indoor-heading">
+        <h3>Indoor</h3>
+    </section>
+
+    <!-- INDOOR AMENITIES GRID -->
+
+    <section class="indoor-amenities">
+        <div class="indoor-grid">
+
+            {% for amenity in indoor_amenities %}
+            <div class="indoor-item">
+                <img src="{{ amenity.image.url }}" alt="{{ amenity.name }}">
+                <p>{{ amenity.name }}</p>
+            </div>
+            {% empty %}
+            <p style="text-align:center;">No indoor amenities available</p>
+            {% endfor %}
+
+        </div>
+    </section>
+
+    <!-- SECTION 3: Outdoor Amenities -->
+    <section class="outdoor-heading">
+        <h3>Outdoor</h3>
+    </section>
+
+    <!-- OUTDOOR AMENITIES GRID -->
+
+    <section class="outdoor-amenities">
+        <div class="outdoor-grid">
+
+            {% for amenity in outdoor_amenities %}
+            <div class="outdoor-item">
+                <img src="{{ amenity.image.url }}" alt="{{ amenity.name }}">
+                <p>{{ amenity.name }}</p>
+            </div>
+            {% empty %}
+            <p style="text-align:center;">No outdoor amenities available</p>
+            {% endfor %}
+
+        </div>
+    </section>
+
+    <!-- CONTACT / FOOTER BOX -->
+    <section class="contact-section">
+        <div class="contact-box">
+
+            <!-- COLUMN 1 : LOGO -->
+            <div class="contact-col logo-col">
+                <img src="{% static 'restaurant/images/hero.png' %}" alt="Casa Lumière Logo">
+            </div>
+
+            <!-- COLUMN 2 : CONTACT INFO -->
+            <div class="contact-col contact-info">
+                <h4>Contact Info</h4><br>
+                <p>
+                    Casa Lumière<br>
+                    Via della Luce 18,<br>
+                    Porto Aurelio District,<br>
+                    20121 Milan, Italy
+                </p>
+                <p>
+                    +39 02 8899 7401<br>
+                    enquiry@casalumiere.com
+                </p>
+            </div>
+
+            <!-- COLUMN 3 : MAP + BUTTON -->
+            <div class="contact-col contact-action">
+                <img src="{% static 'restaurant/images/map.png' %}" alt="Location Map">
+
+                <a href="{% url 'contact' %}" class="book-now-btn inquiry-btn">Send Enquiry</a>
+            </div>
+
+        </div>
+    </section>
+
+    </body>
+</html>

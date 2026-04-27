@@ -1,0 +1,20 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<h1 style="color:#854f6c;">Edit Coupon</h1>
+
+<form method="POST" class="admin-form">
+    {% csrf_token %}
+
+    <label>Code</label>
+    <input type="text" name="code" value="{{ coupon.code }}" required>
+
+    <label>Percentage</label>
+    <input type="number" name="percentage" step="0.01" value="{{ coupon.percentage }}" required>
+
+    <button type="submit" class="btn-add">Edit Coupon</button>
+    <a href="{% url 'admin_coupon' %}" class="btn-cancel">Cancel</a>
+</form>
+
+{% endblock %}

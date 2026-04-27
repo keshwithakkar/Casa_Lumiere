@@ -1,0 +1,53 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1 style="font-weight:800;">Amenities</h1>
+    <a href="{% url 'admin_add_amenity' %}" class="btn-add">+ Add Amenity</a>
+</div>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for a in amenities %}
+        <tr>
+            <td>{{ a.id }}</td>
+            <td>{{ a.name }}</td>
+            <td>{{ a.category }}</td>
+            <td><img src="{{ a.image.url }}" class="table-img"></td>
+            <td>
+                <div class="action-buttons">
+
+                    <a href="{% url 'admin_edit_amenity' a.id %}" class="btn-edit">
+                        Edit
+                    </a>
+
+                    <form action="{% url 'admin_delete_amenity' a.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-delete">Delete</button>
+                    </form>
+
+                </div>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" style="text-align:center;">
+                No amenities found
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

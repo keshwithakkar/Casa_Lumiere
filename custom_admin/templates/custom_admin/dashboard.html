@@ -1,0 +1,158 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+<h1 style="color: #854f6c;">Admin Dashboard</h1>
+
+<div class="cards">
+
+    <a href="{% url 'admin_amenities' %}" class="card-link">
+        <div class="card">
+            Amenities<br>
+            <span>{{ total_amenities }}</span>
+        </div>
+    </a>
+
+    <a href="{% url 'admin_enquiries' %}" class="card-link">
+        <div class="card">
+            Enquiries<br>
+            <span>{{ total_enquiries }}</span>
+        </div>
+    </a>
+
+    <a href="{% url 'admin_testimonials' %}" class="card-link">
+        <div class="card">
+            Testimonials<br>
+            <span>{{ total_testimonials }}</span>
+        </div>
+    </a>
+
+    <a href="{% url 'admin_guests' %}" class="card-link">
+        <div class="card">
+            Guests<br>
+            <span>{{ total_guests }}</span>
+        </div>
+    </a>
+
+    <a href="{% url 'admin_bookings' %}" class="card-link">
+        <div class="card">
+            Bookings<br>
+            <span>{{ total_bookings }}</span>
+        </div>
+    </a>
+
+    <a href="{% url 'admin_bookings' %}" class="card-link">
+        <div class="card">
+            Revenue<br>
+            <span>INR {{ total_revenue }}</span>
+        </div>
+    </a>
+
+    <a href="{% url 'admin_rooms' %}" class="card-link">
+        <div class="card">
+            Rooms<br>
+            <span>{{ total_rooms }}</span>
+        </div>
+    </a>
+
+    <a href="{% url 'admin_registered_users' %}" class="card-link">
+        <div class="card">
+            Registered Users<br>
+            <span>{{ total_registered_users }}</span>
+        </div>
+    </a>
+
+</div>
+
+<!-- Charts Section -->
+<div class="charts-container">
+
+    <div class="chart-row">
+        <div class="chart-box">
+            <canvas id="bookingChart"></canvas>
+        </div>
+
+        <div class="chart-box">
+            <canvas id="guestChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-row" style="justify-content:center;">
+        <div class="chart-box" style="width:60%;">
+            <canvas id="revenueChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const dataValues = {
+    bookings: Number("{{ total_bookings|default:0 }}"),
+    guests: Number("{{ total_guests|default:0 }}"),
+    enquiries: Number("{{ total_enquiries|default:0 }}")
+};
+
+// BAR CHART
+const bookingChart = new Chart(document.getElementById('bookingChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Bookings', 'Guests', 'Enquiries'], // <-- changed labels
+        datasets: [{
+            label: 'Total Count',
+            data: [dataValues.bookings, dataValues.guests, dataValues.enquiries], // <-- one dataset with all values
+            backgroundColor: ['#854f6c', '#ff8fa3', '#fbe4d8']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } } // hide legend since labels are self-explanatory
+    }
+});
+
+// DOUGHNUT CHART
+const guestChart = new Chart(document.getElementById('guestChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Bookings', 'Guests', 'Enquiries'],
+        datasets: [{
+            data: [dataValues.bookings, dataValues.guests, dataValues.enquiries],
+            backgroundColor: ['#854f6c', '#ff8fa3', '#fbe4d8']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { position: 'top' } }
+    }
+});
+
+// REVENUE CHART
+const monthlyRevenue = JSON.parse('{{ monthly_revenue|safe }}');
+
+const revenueChart = new Chart(document.getElementById('revenueChart'), {
+    type: 'line',
+    data: {
+        labels: [
+            'Jan','Feb','Mar','Apr','May','Jun',
+            'Jul','Aug','Sep','Oct','Nov','Dec'
+        ],
+        datasets: [{
+            label: 'Monthly Revenue (INR)',
+            data: monthlyRevenue,
+            borderColor: '#854f6c',
+            backgroundColor: 'rgba(133,79,108,0.2)',
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' }
+        }
+    }
+});
+</script>
+
+{% endblock %}

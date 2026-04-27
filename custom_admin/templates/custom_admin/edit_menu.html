@@ -1,0 +1,44 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<h1 style="color:#854f6c;">Edit Menu Item</h1>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+
+{% csrf_token %}
+
+<label>Restaurant</label>
+<select name="restaurant">
+
+{% for r in restaurants %}
+<option value="{{ r.restaurant_id }}"
+{% if item.restaurant.restaurant_id == r.restaurant_id %}selected{% endif %}>
+{{ r.name }}
+</option>
+{% endfor %}
+
+</select>
+
+<label>Item Name</label>
+<input type="text" name="item_name" value="{{ item.item_name }}" required>
+
+<label>Description</label>
+<textarea name="description">{{ item.description }}</textarea>
+
+<label>Image</label>
+<input type="file" name="image">
+
+{% if item.image %}
+<br><br>
+<img src="{{ item.image.url }}" width="120" style="border-radius:8px;">
+{% endif %}
+
+<br><br>
+
+<button type="submit" class="btn-add">Edit Item</button>
+<a href="{% url 'admin_menu' %}" class="btn-cancel">Cancel</a>
+
+</form>
+
+{% endblock %}

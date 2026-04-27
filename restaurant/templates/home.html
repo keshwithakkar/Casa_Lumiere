@@ -1,0 +1,381 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Casa Lumière | Resort & Spa</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'restaurant/css/home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- HOME IMAGE -->
+    <section class="home-image">
+        <div class="slideshow">
+            <img src="{% static 'restaurant/images/home.png' %}" class="slide active">
+            <img src="{% static 'restaurant/images/home2.png' %}" class="slide">
+        </div>
+
+        <script>
+            let slides = document.querySelectorAll(".slide");
+            let current = 0;
+
+            function changeSlide() {
+                slides[current].classList.remove("active");
+                current = (current + 1) % slides.length;
+                slides[current].classList.add("active");
+            }
+
+            setInterval(changeSlide, 2000); // changes every 4 seconds
+        </script>
+
+        <div class="logo-overlay">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'restaurant/images/hero.png' %}" alt="Casa Lumière Logo">
+            </a>
+        </div>
+
+        <!-- NOTIFICATION ICON -->
+        <div class="notification-icon">
+            <a href="{% url 'notifications' %}">
+                <i class="fa fa-bell"></i>
+                <span class="notif-count"> {{ notification_count }} </span>
+            </a>
+        </div>
+
+        <!-- HAMBURGER MENU BUTTON -->
+        <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- SIDE NAVIGATION -->
+        <nav class="side-nav" id="sideNav">
+            <div class="close-btn" onclick="toggleMenu()">×</div>
+            {% if request.session.username %}
+                <span class="welcome-text">Welcome, {{ request.session.username }}</span>
+            {% endif %}
+
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about_us' %}">About Us</a></li>
+                <li><a href="{% url 'amenities' %}">Amenities</a></li>
+                <li><a href="{% url 'rooms' %}">Accommodation</a></li>
+                <li><a href="{% url 'my_bookings' %}">My Bookings</a></li>
+                <li><a href="{% url 'restaurant_page' %}">Restaurant</a></li>
+                <li><a href="{% url 'gallery' %}">Gallery</a></li>
+                <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                <li><a href="{% url 'faq' %}">FAQ</a></li>
+                <li><a href="{% url 'testimonial' %}">Testimonials</a></li>
+                <li><a href="{% url 'terms' %}">Terms & Conditions</a></li>
+                <li><a href="{% url 'manage_profile' %}">Manage Profile</a></li>
+                <div class="auth-links">
+                    {% if request.session.username %}
+                        <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn">Logout</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <span style="color: #fbe4d8;">|</span>
+                        <a href="{% url 'signup' %}">Signup</a>
+                    {% endif %}
+                </div>
+            </ul>
+        </nav>
+
+        <script>
+            function toggleMenu() {
+                const sideNav = document.getElementById("sideNav");
+                const menuToggle = document.getElementById("menuToggle");
+
+                sideNav.classList.toggle("active");
+
+                // Hide hamburger when menu is open
+                if (sideNav.classList.contains("active")) {
+                    menuToggle.style.display = "none";
+                } else {
+                    menuToggle.style.display = "block";
+                }
+            }
+        </script>
+    </section>
+
+    <!-- OFFER STRIP -->
+    <section class="offer-strip">
+        <div class="offer-text">
+            Indulge in 15% savings on every stay - Use code LUMIERE15 and enjoy the luxury
+        </div>
+    </section>
+
+    <!-- BRAND INTRO -->
+    <section class="brand-intro">
+        <div class="brand-container">
+
+            <div class="brand-left">
+                Casa Lumière
+            </div>
+
+            <div class="brand-right">
+                Casa Lumière Resort & Spa is a five-star luxury retreat offering elegant stays,
+                personalized service, world-class amenities, fine dining, and a serene spa-
+                crafted to deliver unforgettable moments of comfort, tranquility, and sophistication.
+
+                <a href="{% url 'about_us' %}" class="brand-read-more">Read more…</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- STAY WITH US -->
+    <section class="stay-with-us">
+        <h2>Stay With Us</h2>
+
+        <div class="stay-slider">
+
+            {% for room in rooms %}
+                <div class="stay-slide {% if forloop.first %}active{% endif %}">
+                    <div class="stay-box">
+
+                        <div class="stay-box-content">
+
+                            <!-- LEFT -->
+                            <div class="stay-left">
+                                <h3>{{ room.room_type }}</h3>
+                            </div>
+
+                            <!-- RIGHT -->
+                            <div class="stay-right">
+
+                                <!-- Main Image -->
+                                <img src="{{ room.image.url }}" class="main-room-img">
+
+                                <!-- Small Images (optional if you have fields) -->
+                                <div class="small-room-images">
+                                    {% if room.image1 %}
+                                        <img src="{{ room.image.url }}">
+                                    {% endif %}
+                                    {% if room.image2 %}
+                                        <img src="{{ room.image.url }}">
+                                    {% endif %}
+                                    {% if room.image3 %}
+                                        <img src="{{ room.image.url }}">
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <p class="stay-desc">
+                            {{ room.description }}
+                        </p>
+
+                    </div>
+                </div>
+                {% endfor %}
+
+            <!-- NAV BUTTONS -->
+            <button class="stay-nav prev" onclick="changeStay(-1)">❮</button>
+            <button class="stay-nav next" onclick="changeStay(1)">❯</button>
+
+        </div>
+    </section>
+
+    <script>
+        let stayIndex = 0;
+        const staySlides = document.querySelectorAll(".stay-slide");
+
+        function showStaySlide(index) {
+            staySlides.forEach(slide => slide.classList.remove("active"));
+
+            stayIndex = (index + staySlides.length) % staySlides.length;
+            staySlides[stayIndex].classList.add("active");
+        }
+
+        function changeStay(direction) {
+            showStaySlide(stayIndex + direction);
+        }
+
+        // Auto slide every 5 seconds
+        setInterval(() => {
+            changeStay(1);
+        }, 5000);
+    </script>
+
+    <!-- BOOK NOW -->
+    <div class="book-now-wrapper">
+        <a href="{% url 'rooms' %}" class="book-now-btn">Book Now</a>
+    </div>
+
+    <!-- AMENITIES SECTION -->
+    <section class="amenities-section">
+        <h2>Our Amenities</h2>
+
+        <div class="amenities-grid">
+            {% for a in amenities %}
+                <div class="amenity-box">
+                    <img src="{{ a.image.url }}" alt="{{ a.name }}">
+                    <p>{{ a.name }}</p>
+                </div>
+            {% empty %}
+                <p>No amenities available</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- explore more -->
+    <div class="explore-more-wrapper">
+        <a href="{% url 'amenities' %}" class="explore-more-btn">Explore More</a>
+    </div>
+
+    <!-- RESTAURANT HEADING -->
+    <section class="restaurant-heading-section">
+        <h2>Restaurant</h2>
+    </section>
+
+    <!-- RESTAURANT SUBHEADING -->
+    <section class="restaurant-subheading">
+        <h3>Casa Lumière Signature</h3>
+    </section>
+
+    <!-- RESTAURANT HERO IMAGE -->
+    <section class="restaurant-hero">
+        <img src="{% static 'restaurant/images/restaurant.png' %}" alt="Casa Lumière Restaurant">
+    </section>
+
+    <!-- RESTAURANT INTRO TEXT -->
+    <section class="restaurant-intro">
+        <p>
+            Casa Lumière Signature offers an elegant fine-dining experience with curated gourmet cuisine,
+            luxurious ambiance, and impeccable service.
+        </p>
+
+        <!-- explore more -->
+        <div class="explore-more-wrapper">
+            <a href="{% url 'restaurant_page' %}" class="explore-more-btn">Read More</a>
+        </div>
+    </section>
+
+    <!-- GALLERY HEADING -->
+    <section class="gallery-heading">
+        <h2>Gallery</h2>
+    </section>
+
+    <!-- GALLERY GRID -->
+    <section class="gallery-grid">
+        <div class="gallery-container">
+            {% for g in gallery %}
+                <img src="{{ g.image.url }}" alt="Gallery Image">
+            {% empty %}
+                <p>No gallery images available</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- GO TO GALLERY BUTTON -->
+    <div class="book-now-wrapper">
+        <a href="{% url 'gallery' %}" class="book-now-btn">Go to Gallery</a>
+    </div>
+
+    <!-- TESTIMONIALS HEADING -->
+    <section class="testimonials-heading">
+        <h2>Testimonials</h2>
+    </section>
+
+    <!-- TESTIMONIAL BOX -->
+    <section class="testimonial-section">
+
+        <div class="testimonial-slider">
+
+            {% for t in testimonials %}
+            <div class="testimonial-slide {% if forloop.first %}active{% endif %}">
+                
+                <div class="testimonial-box">
+
+                    <!-- LEFT IMAGE -->
+                    <div class="testimonial-left">
+                        {% if t.image %}
+                            <img src="{{ t.image.url }}" alt="{{ t.name }}">
+                        {% endif %}
+                    </div>
+
+                    <!-- RIGHT TEXT -->
+                    <div class="testimonial-right">
+                        {{ t.message }}
+                        <br><br>
+                        <strong>~ {{ t.name }}</strong>
+                    </div>
+
+                </div>
+
+            </div>
+            {% endfor %}
+
+            <!-- NAV BUTTONS -->
+            <button class="testimonial-nav prev" onclick="changeTestimonial(-1)">❮</button>
+            <button class="testimonial-nav next" onclick="changeTestimonial(1)">❯</button>
+
+        </div>
+
+    </section>
+
+    <script>
+        let testimonialIndex = 0;
+        const testimonialSlides = document.querySelectorAll(".testimonial-slide");
+
+        function showTestimonialSlide(index) {
+            testimonialSlides.forEach(slide => slide.classList.remove("active"));
+
+            testimonialIndex = (index + testimonialSlides.length) % testimonialSlides.length;
+            testimonialSlides[testimonialIndex].classList.add("active");
+        }
+
+        function changeTestimonial(direction) {
+            showTestimonialSlide(testimonialIndex + direction);
+        }
+
+        // Auto slide like Stay With Us
+        setInterval(() => {
+            changeTestimonial(1);
+        }, 5000);
+    </script>
+
+    <!-- CONTACT / FOOTER BOX -->
+    <section class="contact-section">
+        <div class="contact-box">
+
+            <!-- COLUMN 1 : LOGO -->
+            <div class="contact-col logo-col">
+                <img src="{% static 'restaurant/images/hero.png' %}" alt="Casa Lumière Logo">
+            </div>
+
+            <!-- COLUMN 2 : CONTACT INFO -->
+            <div class="contact-col contact-info">
+                <h4>Contact Info</h4><br>
+                <p>
+                    Casa Lumière<br>
+                    Via della Luce 18,<br>
+                    Porto Aurelio District,<br>
+                    20121 Milan, Italy
+                </p>
+                <p>
+                    +39 02 8899 7401<br>
+                    enquiry@casalumiere.com
+                </p>
+            </div>
+
+            <!-- COLUMN 3 : MAP + BUTTON -->
+            <div class="contact-col contact-action">
+                <img src="{% static 'restaurant/images/map.png' %}" alt="Location Map">
+
+                <a href="{% url 'contact' %}" class="book-now-btn inquiry-btn">Send Enquiry</a>
+            </div>
+
+        </div>
+    </section>
+</body>
+</html>

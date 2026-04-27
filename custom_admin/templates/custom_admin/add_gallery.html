@@ -1,0 +1,25 @@
+{% extends 'custom_admin/base.html' %}
+{% block content %}
+
+<h1 style="color:#854f6c;">Add Gallery Image</h1>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+    {% csrf_token %}
+
+    <label>Category</label>
+    <div style="display:flex; gap:25px; margin-top:8px; flex-wrap:wrap;">
+        <label><input type="radio" name="category_name" value="The Grandeur" required> The Grandeur</label>
+        <label><input type="radio" name="category_name" value="Elegant Stays"> Elegant Stays</label>
+        <label><input type="radio" name="category_name" value="The Wellness"> The Wellness</label>
+        <label><input type="radio" name="category_name" value="The Leisure"> The Leisure</label>
+        <label><input type="radio" name="category_name" value="The Experience"> The Experience</label>
+    </div>
+
+    <label style="margin-top:15px;">Image</label>
+    <input type="file" name="image" required>
+
+    <button type="submit" class="btn-add">Save Image</button>
+    <a href="{% url 'admin_gallery' %}" class="btn-cancel">Cancel</a>
+</form>
+
+{% endblock %}

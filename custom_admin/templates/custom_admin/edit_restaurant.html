@@ -1,0 +1,27 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<h1 style="color:#854f6c;">Edit Restaurant</h1>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+    {% csrf_token %}
+
+    <label>Name</label>
+    <input type="text" name="name" value="{{ restaurant.name }}" required>
+
+    <label>Description</label>
+    <textarea name="description" rows="5" required>{{ restaurant.description }}</textarea>
+
+    <label>Current Image</label><br>
+    <img src="{{ restaurant.image.url }}" class="table-img"><br><br>
+
+    <label>Change Image</label>
+    <input type="file" name="image">
+
+    <br><br>
+    <button type="submit" class="btn-add">Edit Restaurant</button>
+    <a href="{% url 'admin_restaurant' %}" class="btn-cancel">Cancel</a>
+</form>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'custom_admin/base.html' %}
+{% block content %}
+
+<div style="display:flex; justify-content:space-between; align-items:center;">
+    <h1 style="color:#854f6c;">Gallery</h1>
+    <a href="{% url 'add_gallery' %}" class="btn-add">+ Add Image</a>
+</div>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Image</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for g in gallery_list %}
+        <tr>
+            <td>{{ g.image_id }}</td>
+            <td>{{ g.category_name }}</td>
+            <td>
+                <img src="{{ g.image.url }}" width="80">
+            </td>
+            <td>
+                <a href="{% url 'edit_gallery' g.image_id %}">
+                    <button type="button" class="btn-edit">Edit</button>
+                </a>
+
+                <form action="{% url 'delete_gallery' g.image_id %}"
+                      method="POST"
+                      style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" style="text-align:center;">No images found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

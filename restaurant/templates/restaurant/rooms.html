@@ -1,0 +1,874 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Casa Lumière | Resort & Spa</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'restaurant/css/rooms.css' %}">
+</head>
+<body>
+
+    <!-- HOME IMAGE -->
+    <section class="home-image">
+        <div class="slideshow">
+            <img src="{% static 'restaurant/images/home.png' %}" class="slide active">
+            <img src="{% static 'restaurant/images/home2.png' %}" class="slide">
+        </div>
+
+        <script>
+            let slides = document.querySelectorAll(".slide");
+            let current = 0;
+
+            function changeSlide() {
+                slides[current].classList.remove("active");
+                current = (current + 1) % slides.length;
+                slides[current].classList.add("active");
+            }
+
+            setInterval(changeSlide, 2000); // changes every 4 seconds
+        </script>
+
+        <div class="logo-overlay">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'restaurant/images/hero.png' %}" alt="Casa Lumière Logo">
+            </a>
+        </div>
+
+        <!-- HAMBURGER MENU BUTTON -->
+        <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- SIDE NAVIGATION -->
+        <nav class="side-nav" id="sideNav">
+            <div class="close-btn" onclick="toggleMenu()">×</div>
+            {% if request.session.username %}
+                <span class="welcome-text">Welcome, {{ request.session.username }}</span>
+            {% endif %}
+
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about_us' %}">About Us</a></li>
+                <li><a href="{% url 'amenities' %}">Amenities</a></li>
+                <li><a href="{% url 'rooms' %}">Accommodation</a></li>
+                <li><a href="{% url 'my_bookings' %}">My Bookings</a></li>
+                <li><a href="{% url 'restaurant_page' %}">Restaurant</a></li>
+                <li><a href="{% url 'gallery' %}">Gallery</a></li>
+                <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                <li><a href="{% url 'faq' %}">FAQ</a></li>
+                <li><a href="{% url 'testimonial' %}">Testimonials</a></li>
+                <li><a href="{% url 'terms' %}">Terms & Conditions</a></li>
+                <li><a href="{% url 'manage_profile' %}">Manage Profile</a></li>
+                <div class="auth-links">
+                    {% if request.session.username %}
+                        <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn">Logout</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <span style="color: #fbe4d8;">|</span>
+                        <a href="{% url 'signup' %}">Signup</a>
+                    {% endif %}
+                </div>
+            </ul>
+        </nav>
+
+        <script>
+            function toggleMenu() {
+                const sideNav = document.getElementById("sideNav");
+                const menuToggle = document.getElementById("menuToggle");
+
+                sideNav.classList.toggle("active");
+
+                // Hide hamburger when menu is open
+                if (sideNav.classList.contains("active")) {
+                    menuToggle.style.display = "none";
+                } else {
+                    menuToggle.style.display = "block";
+                }
+            }
+        </script>
+    </section>
+
+    <div class="currency-wrapper" id="currencySection">
+        <div class="currency-toggle">
+            <button id="inrBtn" class="currency-btn active" onclick="switchCurrency('INR')">
+                ₹ INR
+            </button>
+            <button id="eurBtn" class="currency-btn" onclick="switchCurrency('EUR')">
+                € EUR
+            </button>
+        </div>
+    </div>
+
+    <!-- BOOKING SECTION -->
+    <section class="booking-section">
+        <div class="booking-container">
+
+            <!-- Check-in -->
+            <div class="booking-field">
+                <label>Check-In</label>
+                <div class="date-input">
+                    <input type="text" id="checkin" readonly onclick="openBookingCalendar('checkin')" style="width:160px;">
+                    <span class="calendar-icon" onclick="openBookingCalendar('checkin')">📅</span>
+                </div>
+
+                <div id="bookingCalendarCheckin" class="flexible-calendar-room" style="margin-top: 80px;"></div>
+            </div>
+
+            <!-- Check-out -->
+            <div class="booking-field">
+                <label>Check-Out</label>
+                <div class="date-input">
+                    <input type="text" id="checkout" readonly onclick="openBookingCalendar('checkout')" style="width:160px;">
+                    <span class="calendar-icon" onclick="openBookingCalendar('checkout')">📅</span>
+                </div>
+
+                <div id="bookingCalendarCheckout" class="flexible-calendar-room" style="margin-top: 80px;"></div>
+            </div>
+
+            <!-- Rooms -->
+            <div class="booking-field counter-field">
+                <label>Rooms</label>
+                <div class="counter">
+                    <button type="button" onclick="changeCount('rooms', -1)">−</button>
+                    <span id="rooms">1</span>
+                    <button type="button" onclick="changeCount('rooms', 1)">+</button>
+                </div>
+            </div>
+
+            <!-- Adults -->
+            <div class="booking-field counter-field">
+                <label>Adults</label>
+                <div class="counter">
+                    <button type="button" onclick="changeCount('adults', -1)">−</button>
+                    <span id="adults">2</span>
+                    <button type="button" onclick="changeCount('adults', 1)">+</button>
+                </div>
+            </div>
+
+            <!-- Children -->
+            <div class="booking-field counter-field">
+                <label>Children</label>
+                <div class="counter">
+                    <button type="button" onclick="changeCount('children', -1)">−</button>
+                    <span id="children">0</span>
+                    <button type="button" onclick="changeCount('children', 1)">+</button>
+                </div>
+            </div>
+
+            <!-- Search Button -->
+            <div class="booking-field search-field">
+                <button class="search-btn" onclick="enableRooms()">Search</button>
+            </div>
+
+        </div>
+    </section>
+
+    <script>
+
+        let searchClicked = false;
+
+        function enableRooms() {
+
+            const checkin = document.getElementById("checkin").value;
+            const checkout = document.getElementById("checkout").value;
+            const rooms = document.getElementById("rooms").innerText;
+            const adults = document.getElementById("adults").innerText;
+            const children = document.getElementById("children").innerText;
+
+            if (!checkin || !checkout) {
+                alert("Please select Check-In and Check-Out dates.");
+                return;
+            }
+
+            // 🔥 Reload page with query params
+            const url = `/rooms/?checkin=${checkin}&checkout=${checkout}&rooms=${rooms}&adults=${adults}&children=${children}&currency=${currentCurrency}#currencySection`;
+
+            window.location.href = url;
+        }
+
+        function handleRoomClick(button) {
+
+            const errorMsg = button.parentElement.querySelector(".select-error-msg");
+            const searchDone = button.dataset.search === "true";
+            const available = parseInt(button.dataset.available);
+
+            errorMsg.innerText = ""; // clear old message
+
+            // ❌ If search not done
+            if (!searchDone) {
+                errorMsg.innerText = "Select dates first";
+                return;
+            }
+
+            // ❌ If sold out
+            if (available <= 0) {
+                return;
+            }
+
+            // ✅ If everything fine
+            goToBook(button);
+        }
+
+        function changeCount(type, value) {
+            let element = document.getElementById(type);
+            let count = parseInt(element.innerText);
+            count += value;
+
+            // Prevent negative
+            if (count < 0) count = 0;
+
+            // Minimum rules
+            if (type === "adults" && count < 1) count = 1;
+            if (type === "rooms" && count < 1) count = 1;
+
+            // Maximum rule
+            if (type === "adults" && count > 2) count = 2;
+            if (type === "children" && count > 2) count = 2;
+
+            element.innerText = count;
+        }
+
+        // DATE RESTRICTIONS
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const today = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 1);
+
+            const twoMonthsLater = new Date();
+            twoMonthsLater.setMonth(today.getMonth() + 2);
+
+            const formatDate = (date) => {
+                return date.toISOString().split("T")[0];
+            };
+
+            const checkin = document.getElementById("checkin");
+            const checkout = document.getElementById("checkout");
+
+            // Disable past dates
+            checkin.min = formatDate(today);
+            checkout.min = formatDate(today);
+
+            // Limit booking to 2 months
+            checkin.max = formatDate(twoMonthsLater);
+            checkout.max = formatDate(twoMonthsLater);
+
+            // 🔹 Read URL parameters
+            const params = new URLSearchParams(window.location.search);
+            const checkinParam = params.get("checkin");
+            const checkoutParam = params.get("checkout");
+
+            // 🔹 If dates exist in URL → use them
+            if (checkinParam && checkoutParam) {
+
+                checkin.value = checkinParam;
+                checkout.value = checkoutParam;
+
+                // update checkout minimum
+                let nextDay = new Date(checkinParam);
+                nextDay.setDate(nextDay.getDate() + 1);
+                checkout.min = formatDate(nextDay);
+
+            } else {
+                // 🔹 Otherwise set default dates
+                checkin.value = formatDate(today);
+                checkout.value = formatDate(tomorrow);
+            }
+
+            // Ensure checkout always after checkin
+            checkin.addEventListener("change", function () {
+
+                let selectedDate = new Date(this.value);
+                selectedDate.setDate(selectedDate.getDate() + 1);
+
+                checkout.min = formatDate(selectedDate);
+
+                if (checkout.value <= this.value) {
+                    checkout.value = formatDate(selectedDate);
+                }
+            });
+
+            // Currency from URL
+            const currencyParam = params.get('currency');
+
+            if (currencyParam && (currencyParam === "EUR" || currencyParam === "INR")) {
+                currentCurrency = currencyParam;
+            } else {
+                currentCurrency = "INR";
+            }
+
+            switchCurrency(currentCurrency);
+        });
+    </script>
+
+    <script>
+        let bookingMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+        let activeInput = "checkin";
+
+        function openBookingCalendar(input){
+
+            const checkinCal = document.getElementById("bookingCalendarCheckin");
+            const checkoutCal = document.getElementById("bookingCalendarCheckout");
+
+            if(input === "checkin"){
+                checkinCal.style.display = "block";
+                checkoutCal.style.display = "none";
+            }
+            else{
+                checkoutCal.style.display = "block";
+                checkinCal.style.display = "none";
+            }
+
+            activeInput = input;
+            renderBookingCalendar(input);
+        }
+
+        function renderBookingCalendar(input){
+
+            const calendar = input === "checkin"
+            ? document.getElementById("bookingCalendarCheckin")
+            : document.getElementById("bookingCalendarCheckout");
+
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            const maxDate = new Date();
+            maxDate.setMonth(maxDate.getMonth()+2);
+
+            const monthName = bookingMonth.toLocaleString("default",{month:"long"});
+            const year = bookingMonth.getFullYear();
+
+            let html = `
+                <div class="calendar-header">
+                    <button onclick="changeBookingMonth(-1)">‹</button>
+                    <div class="calendar-title">${monthName} ${year}</div>
+                    <button onclick="changeBookingMonth(1)">›</button>
+                </div>
+                <div class="calendar-grid">
+            `;
+
+            const days = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+            days.forEach(d => html += `<div class="day-name">${d}</div>`);
+
+            const firstDay = new Date(year, bookingMonth.getMonth(),1).getDay();
+            for(let i=0;i<firstDay;i++) html += `<div></div>`;
+
+            const lastDate = new Date(year, bookingMonth.getMonth()+1,0).getDate();
+
+            for(let d=1; d<=lastDate; d++){
+
+                let thisDate = new Date(year, bookingMonth.getMonth(), d);
+                thisDate.setHours(0,0,0,0);
+
+                let checkinValue = document.getElementById("checkin").value;
+                    let checkinDate = checkinValue ? new Date(checkinValue) : null;
+
+                    if(
+                        thisDate < today ||
+                        thisDate > maxDate ||
+                        (input === "checkout" && checkinDate && thisDate <= checkinDate)
+                    ){
+                        html += `<div class="day-box disabled">${d}</div>`;
+                        continue;
+                    }
+
+                let yyyy=thisDate.getFullYear();
+                let mm=String(thisDate.getMonth()+1).padStart(2,'0');
+                let dd=String(thisDate.getDate()).padStart(2,'0');
+                let formatted=`${yyyy}-${mm}-${dd}`;
+
+                html += `
+                <div class="day-box"
+                onclick="selectBookingDate('${formatted}')">
+                ${d}
+                </div>`;
+            }
+
+            html += `</div>`;
+
+            calendar.innerHTML = html;
+        }
+
+        function changeBookingMonth(direction){
+
+            let newMonth = new Date(bookingMonth);
+            newMonth.setMonth(newMonth.getMonth()+direction);
+
+            const today = new Date();
+            const maxDate = new Date();
+            maxDate.setMonth(today.getMonth()+2);
+
+            const firstAllowed = new Date(today.getFullYear(),today.getMonth(),1);
+            const lastAllowed = new Date(maxDate.getFullYear(),maxDate.getMonth(),1);
+
+            if(newMonth < firstAllowed || newMonth > lastAllowed) return;
+
+            bookingMonth = newMonth;
+            renderBookingCalendar(activeInput);
+        }
+
+        function selectBookingDate(date){
+
+            const checkin = document.getElementById("checkin");
+            const checkout = document.getElementById("checkout");
+
+            if(activeInput === "checkin"){
+
+                checkin.value = date;
+
+                let d = new Date(date);
+                d.setDate(d.getDate()+1);
+
+                let yyyy=d.getFullYear();
+                let mm=String(d.getMonth()+1).padStart(2,'0');
+                let dd=String(d.getDate()).padStart(2,'0');
+
+                checkout.value = `${yyyy}-${mm}-${dd}`;
+            }
+            else{
+                checkout.value = date;
+            }
+
+            document.getElementById("bookingCalendarCheckin").style.display="none";
+            document.getElementById("bookingCalendarCheckout").style.display="none";
+        }
+    </script>
+
+
+    
+
+
+
+    <!-- Rooms HEADING -->
+    <section class="rooms-heading-section">
+        <h2>Elegant Stays</h2>
+    </section>
+
+    <!-- STAY WITH US -->
+    <section class="stay-with-us">
+
+        {% for room in rooms %}
+            <div class="stay-box">
+                <div class="stay-box-content">
+
+                    <div class="stay-left">
+                        <h3>{{ room.room_type }}</h3>
+                    </div>
+
+                    <div class="stay-right">
+                        <div class="stay-gallery">
+
+                            <div class="gallery-main">
+                                {% if room.image %}
+                                    {% if "casa" in room.room_type|lower %}
+                                        <img src="{{ room.image.url }}" class="gallery-img" onclick="openLightbox('casa',0)">
+                                    {% elif "deluxe" in room.room_type|lower %}
+                                        <img src="{{ room.image.url }}" class="gallery-img" onclick="openLightbox('deluxe',0)">
+                                    {% elif "executive" in room.room_type|lower %}
+                                        <img src="{{ room.image.url }}" class="gallery-img" onclick="openLightbox('executive',0)">
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+
+                            <!-- THREE SMALL IMAGES -->
+                            <div class="gallery-side">
+                                {% if "casa" in room.room_type|lower %}
+                                <img src="{% static 'restaurant/images/room1_1.png' %}" onclick="openLightbox('casa',1)">
+                                <img src="{% static 'restaurant/images/room1_2.png' %}" onclick="openLightbox('casa',2)">
+                                <img src="{% static 'restaurant/images/room1_3.png' %}" onclick="openLightbox('casa',3)">
+                                {% elif "deluxe" in room.room_type|lower %}
+                                <img src="{% static 'restaurant/images/room2_1.png' %}" onclick="openLightbox('deluxe',1)">
+                                <img src="{% static 'restaurant/images/room2_2.png' %}" onclick="openLightbox('deluxe',2)">
+                                <img src="{% static 'restaurant/images/room2_3.png' %}" onclick="openLightbox('deluxe',3)">
+                                {% elif "executive" in room.room_type|lower %}
+                                <img src="{% static 'restaurant/images/room3_1.png' %}" onclick="openLightbox('executive',1)">
+                                <img src="{% static 'restaurant/images/room3_2.png' %}" onclick="openLightbox('executive',2)">
+                                <img src="{% static 'restaurant/images/room3_3.png' %}" onclick="openLightbox('executive',3)">
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <p class="stay-desc">
+                    {{ room.description }}
+                </p>
+
+                <div class="price-bar">
+                    <div class="price-left">
+                        <h4>Per Room</h4>
+                        <p>Inclusive Breakfast</p>
+                    </div>
+
+                    <div class="price-right">
+                        <span class="room-price"
+                            data-price="{{ room.calculated_price }}">
+                            ₹ {{ room.calculated_price }}
+                        </span>
+                        {% if checkin and checkout %}
+                            {% if room.available_rooms and room.available_rooms >= rooms_requested|add:0 %}
+                                <button class="select-btn"
+                                    onclick="goToBook('{{ room.room_type }}', '{{ room.calculated_price }}')">
+                                    Select
+                                </button>
+                                <div class="rooms-left-text">
+                                    Only {{ room.available_rooms }} Rooms Left
+                                </div>
+                                <!-- <p style="color: red;">Only {{ room.available_rooms }} Left</p> -->
+                            {% else %}
+                                <button class="select-btn" disabled style="opacity:0.6; cursor:not-allowed;">
+                                    Sold Out
+                                </button>
+                            {% endif %}
+
+                        {% else %}
+                            <button class="select-btn" disabled style="opacity:0.6; cursor:not-allowed;">
+                                Select dates
+                            </button>
+                        {% endif %}
+                        
+                        <p class="select-error-msg"></p>
+
+                    </div>
+                </div>
+                
+                {% if "casa" in room.room_type|lower %}
+                    <a onclick="toggleFlexibleCalendarRoom('casa')" 
+                    class="flexible-link" id="flexible-link-casa" style="margin-left: 1100px;">
+                    Flexible Dates
+                    </a>
+
+                    <div id="flexibleCalendar-casa" class="flexible-calendar-room" style="margin-left: 1000px;"></div>
+                {% elif "deluxe" in room.room_type|lower %}
+                    <a onclick="toggleFlexibleCalendarRoom('deluxe')" 
+                    class="flexible-link" id="flexible-link-deluxe" style="margin-left: 1100px;">
+                    Flexible Dates
+                    </a>
+
+                    <div id="flexibleCalendar-deluxe" class="flexible-calendar-room" style="margin-left: 1000px;"></div>
+                {% elif "executive" in room.room_type|lower %}
+                    <a onclick="toggleFlexibleCalendarRoom('executive')" 
+                    class="flexible-link" id="flexible-link-executive" style="margin-left: 1100px;">
+                    Flexible Dates
+                    </a>
+
+                    <div id="flexibleCalendar-executive" class="flexible-calendar-room" style="margin-left: 1000px;"></div>
+                {% endif %}
+
+            </div>
+            {% empty %}
+            <p style="text-align:center;">No rooms available</p>
+            {% endfor %}
+    </section>
+
+    <script>
+        const roomPrices = {
+            casa: { weekday: 10500, weekend: 11500 },
+            deluxe: { weekday: 8500, weekend: 9500 },
+            executive: { weekday: 7000, weekend: 8000 }
+        };
+
+        let currentMonthRoom = {}; // keep track of each room's calendar month
+
+        function toggleFlexibleCalendarRoom(room) {
+            const calendar = document.getElementById(`flexibleCalendar-${room}`);
+            
+            // Initialize month if first time
+            if (!currentMonthRoom[room]) {
+                const today = new Date();
+                currentMonthRoom[room] = new Date(today.getFullYear(), today.getMonth(), 1);
+            }
+            
+            // Toggle display
+            calendar.style.display = calendar.style.display === "block" ? "none" : "block";
+            renderCalendarRoom(room);
+        }
+
+        function renderCalendarRoom(room) {
+            const calendar = document.getElementById(`flexibleCalendar-${room}`);
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const maxDate = new Date(today);
+            maxDate.setMonth(maxDate.getMonth() + 2);
+
+            const currentMonth = currentMonthRoom[room];
+            const monthName = currentMonth.toLocaleString("default", { month: "long" });
+            const year = currentMonth.getFullYear();
+
+            let html = `<div class="calendar-header">
+                            <button onclick="changeMonthRoom('${room}', -1)">‹</button>
+                            <div class="calendar-title">${monthName} ${year}</div>
+                            <button onclick="changeMonthRoom('${room}', 1)">›</button>
+                        </div>
+                        <div class="calendar-grid">`;
+
+            const days = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+            days.forEach(day => html += `<div class="day-name">${day}</div>`);
+
+            const firstDay = new Date(year, currentMonth.getMonth(), 1).getDay();
+            for (let i=0;i<firstDay;i++) html += `<div></div>`;
+
+            const lastDate = new Date(year, currentMonth.getMonth()+1,0).getDate();
+            for (let date=1; date<=lastDate; date++){
+                const thisDate = new Date(year, currentMonth.getMonth(), date);
+                thisDate.setHours(0,0,0,0);
+
+                if (thisDate < today || thisDate > maxDate) {
+                    html += `<div class="day-box disabled">${date}</div>`;
+                    continue;
+                }
+
+                const isWeekend = thisDate.getDay() === 0 || thisDate.getDay() === 6;
+                const price = isWeekend ? roomPrices[room].weekend : roomPrices[room].weekday;
+
+                let yyyy = thisDate.getFullYear();
+                let mm = String(thisDate.getMonth()+1).padStart(2,'0');
+                let dd = String(thisDate.getDate()).padStart(2,'0');
+                let formattedDate = `${yyyy}-${mm}-${dd}`;
+
+                let displayPrice = price;
+                let symbol = "₹";
+
+                if (currentCurrency === "EUR") {
+                    displayPrice = price / conversionRate;
+                    displayPrice = Math.round(displayPrice * 100) / 100;
+                    symbol = "€";
+                }
+
+                html += `<div class="day-box ${isWeekend ? "weekend" : ""}"
+                        onclick="selectFlexibleDateRoom('${room}','${formattedDate}','${price}')">
+                        ${date}<span class="price">${symbol}${displayPrice}</span>
+                    </div>`;
+            }
+
+            html += `</div>`;
+            calendar.innerHTML = html;
+        }
+
+        function changeMonthRoom(room, direction){
+            let newMonth = new Date(currentMonthRoom[room]);
+            newMonth.setMonth(newMonth.getMonth() + direction);
+
+            const today = new Date();
+            const maxDate = new Date(today);
+            maxDate.setMonth(today.getMonth()+2);
+
+            const firstAllowedMonth = new Date(today.getFullYear(), today.getMonth(),1);
+            const lastAllowedMonth = new Date(maxDate.getFullYear(), maxDate.getMonth(),1);
+
+            if (newMonth < firstAllowedMonth || newMonth > lastAllowedMonth) return;
+
+            currentMonthRoom[room] = newMonth;
+            renderCalendarRoom(room);
+        }
+
+        function selectFlexibleDateRoom(room, dateString, price) {
+            const checkinInput = document.getElementById("checkin");
+            const checkoutInput = document.getElementById("checkout");
+
+            checkinInput.value = dateString;
+
+            const parts = dateString.split("-");
+            let year = parseInt(parts[0]), month = parseInt(parts[1])-1, day = parseInt(parts[2]);
+            let nextDay = new Date(year, month, day);
+            nextDay.setDate(nextDay.getDate()+1);
+
+            let yyyy = nextDay.getFullYear();
+            let mm = String(nextDay.getMonth()+1).padStart(2,'0');
+            let dd = String(nextDay.getDate()).padStart(2,'0');
+            checkoutInput.value = `${yyyy}-${mm}-${dd}`;
+            checkoutInput.min = `${yyyy}-${mm}-${dd}`;
+
+            // store price for booking
+            let finalPrice = price;
+
+            if (currentCurrency === "EUR") {
+                finalPrice = price / conversionRate;
+                finalPrice = Math.round(finalPrice * 100) / 100;
+            }
+
+            document.querySelector(`#lightbox-img`).dataset.price = finalPrice;
+
+            // close calendar
+            document.getElementById(`flexibleCalendar-${room}`).style.display = "none";
+        }
+    </script>
+
+    <script>
+        const conversionRate = 90; // 1 EUR = 90 INR
+        let currentCurrency = "INR";
+
+        function switchCurrency(currency) {
+            currentCurrency = currency;
+
+            document.getElementById("inrBtn").classList.remove("active");
+            document.getElementById("eurBtn").classList.remove("active");
+
+            if (currency === "EUR") {
+                document.getElementById("eurBtn").classList.add("active");
+            } else {
+                document.getElementById("inrBtn").classList.add("active");
+            }
+
+            document.querySelectorAll(".room-price").forEach(function(priceElement) {
+                let inrPrice = parseFloat(priceElement.dataset.price);
+
+                if (currency === "EUR") {
+                    let eurPrice = (inrPrice / conversionRate).toFixed(2);
+                    priceElement.innerHTML = "€ " + eurPrice;
+                } else {
+                    priceElement.innerHTML = "₹ " + inrPrice;
+                }
+            });
+
+            document.querySelectorAll(".extra-price").forEach(function(priceElement) {
+                let inrPrice = parseFloat(priceElement.dataset.price);
+
+                if (currency === "EUR") {
+                    let eurPrice = (inrPrice / conversionRate).toFixed(2);
+                    priceElement.innerHTML = "€ " + eurPrice;
+                } else {
+                    priceElement.innerHTML = "₹ " + inrPrice;
+                }
+            });
+
+            Object.keys(currentMonthRoom).forEach(room => {
+            renderCalendarRoom(room);
+        });
+        }
+    </script>
+
+
+    <!-- GLOBAL LIGHTBOX -->
+    <div id="lightbox" class="lightbox">
+        <span class="close-lightbox" onclick="closeLightbox()">×</span>
+        <span class="lightbox-arrow left" onclick="changeImage(-1)">&#10094;</span>
+        <img id="lightbox-img">
+        <span class="lightbox-arrow right" onclick="changeImage(1)">&#10095;</span>
+    </div>
+
+    <script>
+        const roomImages = {
+            casa: [
+                "{% static 'restaurant/images/room1.png' %}",
+                "{% static 'restaurant/images/room1_1.png' %}",
+                "{% static 'restaurant/images/room1_2.png' %}",
+                "{% static 'restaurant/images/room1_3.png' %}"
+            ],
+            deluxe: [
+                "{% static 'restaurant/images/room2.png' %}",
+                "{% static 'restaurant/images/room2_1.png' %}",
+                "{% static 'restaurant/images/room2_2.png' %}",
+                "{% static 'restaurant/images/room2_3.png' %}"
+            ],
+            executive: [
+                "{% static 'restaurant/images/room3.png' %}",
+                "{% static 'restaurant/images/room3_1.png' %}",
+                "{% static 'restaurant/images/room3_2.png' %}",
+                "{% static 'restaurant/images/room3_3.png' %}"
+            ]
+        };
+
+        let currentImages = [];
+        let currentIndex = 0;
+
+        function openLightbox(room, index) {
+            currentImages = roomImages[room];
+            currentIndex = index;
+
+            document.getElementById("lightbox-img").src = currentImages[currentIndex];
+            document.getElementById("lightbox").style.display = "flex";
+        }
+
+        function closeLightbox() {
+            document.getElementById("lightbox").style.display = "none";
+        }
+
+        function changeImage(direction) {
+            currentIndex += direction;
+
+            if (currentIndex < 0) currentIndex = currentImages.length - 1;
+            if (currentIndex >= currentImages.length) currentIndex = 0;
+
+            document.getElementById("lightbox-img").src = currentImages[currentIndex];
+        }
+    </script>
+
+    <script>
+        function goToBook(roomType, originalPrice) {
+            // originalPrice comes from '{{ room.price }}' → always INR
+
+            const checkin   = "{{ checkin|default:'' }}";
+            const checkout  = "{{ checkout|default:'' }}";
+            const adults    = "{{ adults|default:'2' }}";
+            const children  = "{{ children|default:'0' }}";
+            const rooms     = "{{ rooms_requested|default:'1' }}";
+            const currency  = currentCurrency;   // current frontend currency (INR or EUR)
+
+            let priceToPass = parseFloat(originalPrice);
+
+            // If user selected EUR → convert to EUR before passing
+            if (currency === "EUR") {
+                const conversionRate = 90;
+                priceToPass = priceToPass / conversionRate;
+                priceToPass = Math.round(priceToPass * 100) / 100; // 2 decimal places
+            }
+
+            const url = `/book/?` +
+                `checkin=${checkin}` +
+                `&checkout=${checkout}` +
+                `&adults=${adults}` +
+                `&children=${children}` +
+                `&rooms=${rooms}` +
+                `&room=${encodeURIComponent(roomType)}` +
+                `&price=${priceToPass}` +
+                `&currency=${currency}`;
+
+            window.location.href = url;
+        }
+    </script>
+
+
+    <!-- CONTACT / FOOTER BOX -->
+    <section class="contact-section">
+        <div class="contact-box">
+
+            <!-- COLUMN 1 : LOGO -->
+            <div class="contact-col logo-col">
+                <img src="{% static 'restaurant/images/hero.png' %}" alt="Casa Lumière Logo">
+            </div>
+
+            <!-- COLUMN 2 : CONTACT INFO -->
+            <div class="contact-col contact-info">
+                <h4>Contact Info</h4><br>
+                <p>
+                    Casa Lumière<br>
+                    Via della Luce 18,<br>
+                    Porto Aurelio District,<br>
+                    20121 Milan, Italy
+                </p>
+                <p>
+                    +39 02 8899 7401<br>
+                    enquiry@casalumiere.com
+                </p>
+            </div>
+
+            <!-- COLUMN 3 : MAP + BUTTON -->
+            <div class="contact-col contact-action">
+                <img src="{% static 'restaurant/images/map.png' %}" alt="Location Map">
+
+                <a href="{% url 'contact' %}" class="book-now-btn inquiry-btn">Send Enquiry</a>
+            </div>
+
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,194 @@
+{% load static %}
+{% block content %}
+
+<style>
+
+body{
+    font-family:'Poppins',sans-serif;
+    background: linear-gradient(135deg, #fbe4d8, #f8d7e3);
+}
+
+/* WRAPPER (controls alignment) */
+.page-wrapper{
+    max-width:900px;
+    margin:40px auto;
+}
+
+/* TOP ROW (BACK + TITLE ALIGN) */
+.top-row{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:15px;
+}
+
+/* BACK BUTTON */
+.back-btn{
+    text-decoration:none;
+    color:#fbe4d8;
+    font-size:14px;
+    font-weight:500;
+    padding:8px 16px;
+    border-radius:20px;
+    background:#854f6c;
+    transition:0.3s;
+}
+
+.back-btn:hover{
+    background:#a56c89;
+    color:white;
+    transform:translateX(-4px);
+}
+
+/* TITLE */
+.page-title{
+    font-family:'Playfair Display';
+    color:#854f6c;
+    font-size:28px;
+    margin:0;
+}
+
+/* MAIN BOX */
+.notification-box{
+    background:white;
+    padding:40px;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* SUBTITLE */
+.subtitle{
+    color:#777;
+    font-size:14px;
+    margin-bottom:25px;
+}
+
+/* CARD */
+.notification-card{
+    background:rgba(255,255,255,0.9);
+    padding:20px;
+    border-radius:14px;
+    margin-bottom:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition:all 0.3s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+/* SHINE EFFECT */
+.notification-card::before{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:-100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition:0.5s;
+}
+
+.notification-card:hover::before{
+    left:100%;
+}
+
+.notification-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.1);
+}
+
+/* TYPES */
+.success{ border-left:5px solid #28a745; }
+.warning{ border-left:5px solid #ffc107; }
+.info{ border-left:5px solid #17a2b8; }
+.danger{ border-left:5px solid #dc3545; }
+.review{ border-left:5px solid #854f6c; }
+
+/* MESSAGE */
+.message{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:15px;
+    color:#333;
+}
+
+/* ICON */
+.icon{
+    font-size:18px;
+}
+
+/* BUTTON */
+.btn{
+    padding:8px 18px;
+    background:linear-gradient(135deg, #854f6c, #a56c89);
+    color:white;
+    border-radius:20px;
+    text-decoration:none;
+    font-size:13px;
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform:scale(1.05);
+    box-shadow:0 5px 12px rgba(0,0,0,0.2);
+}
+
+/* EMPTY */
+.empty{
+    text-align:center;
+    color:#777;
+    padding:30px;
+    font-size:15px;
+}
+
+</style>
+
+
+<div class="page-wrapper">
+
+    <!-- TOP ROW (PERFECT ALIGNMENT) -->
+    <div class="top-row">
+        <a href="{% url 'home' %}" class="back-btn">← Back</a>
+        
+    </div>
+
+    <!-- BOX -->
+    <div class="notification-box">
+
+        <h1 class="page-title">Notifications</h1>
+        <p class="subtitle">Stay updated with your bookings</p>
+
+        {% for n in notifications %}
+        <div class="notification-card {{ n.type }}">
+            
+            <div class="message">
+                <span class="icon">
+                    {% if n.type == "success" %}🎉
+                    {% elif n.type == "warning" %}⏳
+                    {% elif n.type == "info" %}🔔
+                    {% elif n.type == "danger" %}❌
+                    {% elif n.type == "review" %}💜
+                    {% endif %}
+                </span>
+
+                {{ n.message }}
+            </div>
+
+            {% if n.link %}
+            <a href="{{ n.link }}" class="btn">Give Feedback</a>
+            {% endif %}
+
+        </div>
+        {% empty %}
+        <div class="empty">
+            No notifications yet.
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

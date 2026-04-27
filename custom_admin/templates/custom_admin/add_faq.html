@@ -1,0 +1,19 @@
+{% extends 'custom_admin/base.html' %}
+{% block content %}
+
+<h1 style="color: #854f6c;">Add FAQ</h1>
+
+<form method="POST" class="admin-form">
+    {% csrf_token %}
+
+    <label>Question</label>
+    <input type="text" name="question" required>
+
+    <label>Answer</label>
+    <textarea name="answer" rows="5" required></textarea>
+
+    <button type="submit" class="btn-add">Save FAQ</button>
+    <a href="{% url 'admin_faqs' %}" class="btn-cancel">Cancel</a>
+</form>
+
+{% endblock %}

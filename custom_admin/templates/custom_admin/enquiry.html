@@ -1,0 +1,32 @@
+{% extends 'custom_admin/base.html' %}
+{% block content %}
+
+<h1 style="color: #854f6c;">Contact Enquiries</h1>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for e in enquiries %}
+        <tr>
+            <td>{{ e.enquiry_id }}</td>
+            <td>{{ e.name }}</td>
+            <td>{{ e.email }}</td>
+            <td>{{ e.phone }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" style="text-align:center;">No enquiries found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

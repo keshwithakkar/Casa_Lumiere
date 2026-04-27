@@ -1,0 +1,24 @@
+{% extends 'custom_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1 style="color: #854f6c;">Add Testimonial</h1>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+    {% csrf_token %}
+
+    <label>Name</label>
+    <input type="text" name="name" required>
+
+    <label>Message</label>
+    <textarea name="message" rows="4" required></textarea>
+
+    <label>Image</label>
+    <input type="file" name="image" required>
+
+    <button type="submit" class="btn-add">Save Testimonial</button>
+    <a href="{% url 'admin_testimonials' %}" class="btn-cancel">Cancel</a>
+</form>
+
+{% endblock %}

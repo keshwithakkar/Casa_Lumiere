@@ -1,0 +1,24 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<h1 style="color:#854f6c;">Add Registered Guest</h1>
+
+<form method="POST" class="admin-form">
+    {% csrf_token %}
+
+    <label>Username</label>
+    <input type="text" name="username" required>
+
+    <label>Email</label>
+    <input type="email" name="email" required>
+
+    <label>Password</label>
+    <input type="text" name="password" required>
+
+    <button type="submit" class="btn-add">Save Guest</button>
+    <a href="{% url 'admin_registered_users' %}" class="btn-cancel">Cancel</a>
+
+</form>
+
+{% endblock %}

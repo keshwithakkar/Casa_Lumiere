@@ -1,0 +1,70 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1 style="font-weight:800;">Menu Items</h1>
+    <a href="{% url 'admin_add_menu' %}" class="btn-add">+ Add Menu Item</a>
+</div>
+
+<table class="admin-table">
+
+<thead>
+<tr>
+    <th>ID</th>
+    <th>Restaurant</th>
+    <th>Item</th>
+    <th>Description</th>
+    <th>Image</th>
+    <th>Actions</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for i in items %}
+<tr>
+
+<td>{{ i.id }}</td>
+<td>{{ i.restaurant.name }}</td>
+<td>{{ i.item_name }}</td>
+<td>{{ i.description }}</td>
+
+<td>
+<img src="{{ i.image.url }}" class="table-img">
+</td>
+
+<td>
+
+<div class="action-buttons">
+
+<a href="{% url 'admin_edit_menu' i.id %}" class="btn-edit">
+Edit
+</a>
+
+<form action="{% url 'admin_delete_menu' i.id %}" method="post" style="display:inline;">
+{% csrf_token %}
+<button type="submit" class="btn-delete">Delete</button>
+</form>
+
+</div>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="7" style="text-align:center;">
+No menu items found
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'custom_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1 style="color: #854f6c;">Edit Testimonial</h1>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+    {% csrf_token %}
+
+    <label>Name</label>
+    <input type="text" name="name" value="{{ testimonial.name }}" required>
+
+    <label>Message</label>
+    <textarea name="message" rows="4" required>{{ testimonial.message }}</textarea>
+
+    <label>Image</label>
+    <input type="file" name="image">
+
+    {% if testimonial.image %}
+        <br><br>
+        <img src="{{ testimonial.image.url }}" width="120" style="border-radius:8px;">
+    {% endif %}
+
+    <br><br>
+    <button type="submit" class="btn-add">Edit Testimonial</button>
+    <a href="{% url 'admin_testimonials' %}" class="btn-cancel">Cancel</a>
+</form>
+
+{% endblock %}

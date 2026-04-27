@@ -1,0 +1,320 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Casa Lumière | Invoice</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#fbe4d8;
+    margin:0;
+    padding:40px;
+}
+
+/* MAIN BOX */
+
+.invoice-box{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    padding:50px;
+    border-radius:10px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+}
+
+/* HEADER */
+
+.invoice-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:2px solid #f1f1f1;
+    padding-bottom:20px;
+    margin-bottom:30px;
+}
+
+.logo img{
+    width:110px;
+}
+
+.invoice-title{
+    text-align:right;
+}
+
+.invoice-title h1{
+    font-family:'Playfair Display';
+    color:#854f6c;
+    margin:0;
+}
+
+.invoice-title p{
+    color:#777;
+    font-size:14px;
+}
+
+/* SECTION CARDS */
+
+.section{
+    margin-bottom:30px;
+}
+
+.section h3{
+    color:#854f6c;
+    margin-bottom:12px;
+    font-size:18px;
+}
+
+.card{
+    background:#fafafa;
+    padding:18px;
+    border-radius:6px;
+    line-height:1.8;
+}
+
+/* BOOKING GRID */
+
+.booking-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+/* TABLE */
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.table th{
+    text-align:left;
+    padding:12px;
+    background:#854f6c;
+    color:white;
+    font-weight:500;
+}
+
+.table td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+.total-row{
+    font-size:18px;
+    font-weight:600;
+    color:#854f6c;
+}
+
+/* BUTTONS */
+
+.buttons{
+    text-align:center;
+    margin-top:35px;
+}
+
+.btn{
+    padding:12px 28px;
+    background:#854f6c;
+    color:white;
+    border:none;
+    border-radius:5px;
+    text-decoration:none;
+    margin:8px;
+    cursor:pointer;
+    font-size:14px;
+    transition:0.3s;
+}
+
+.btn:hover{
+    background:#6e3f59;
+}
+
+/* FOOTER */
+
+.invoice-footer{
+    text-align:center;
+    margin-top:35px;
+    font-size:13px;
+    color:#777;
+}
+
+@media print {
+    .buttons {
+        display: none !important;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="invoice-box">
+
+<!-- HEADER -->
+
+<div class="invoice-header">
+
+<div class="logo">
+<img src="{% static 'restaurant/images/hero.png' %}">
+</div>
+
+<div class="invoice-title">
+<h1>Booking Invoice</h1>
+<p>Casa Lumière Resort & Spa</p>
+</div>
+
+</div>
+
+
+<!-- GUEST DETAILS -->
+
+<div class="section">
+
+<h3>Guest Details</h3>
+
+<div class="card">
+<b>Name :</b> {{booking.guest.name}} <br>
+<b>Email :</b> {{booking.guest.email}} <br>
+<b>Phone :</b> {{booking.guest.phone}}
+</div>
+
+</div>
+
+
+<!-- BOOKING DETAILS -->
+
+<div class="section">
+
+<h3>Booking Details</h3>
+
+<div class="card booking-grid">
+
+<div><b>Room</b><br>{{booking.room}}</div>
+<div><b>Rooms</b><br>{{booking.rooms_booked}}</div>
+
+<div><b>Check-In</b><br>{{booking.check_in}}</div>
+<div><b>Check-Out</b><br>{{booking.check_out}}</div>
+
+<div><b>Adults</b><br>{{booking.adults}}</div>
+<div><b>Children</b><br>{{booking.children}}</div>
+
+</div>
+
+</div>
+
+
+<!-- PAYMENT SUMMARY -->
+
+<div class="section">
+
+<h3>Payment Summary</h3>
+
+<table class="table">
+
+<tr>
+<th>Description</th>
+<th>Amount</th>
+</tr>
+
+<tr>
+<td>Room Price</td>
+<td>{{booking.room_price}}</td>
+</tr>
+
+<tr>
+<td>Extra Guest</td>
+<td>{{booking.extra_guest_price}}</td>
+</tr>
+
+<tr>
+<td>Tax</td>
+<td>{{booking.tax_price}}</td>
+</tr>
+
+{% if discount != "0" %}
+<tr>
+<td>Discount</td>
+<td>{{booking.discount_price}}</td>
+</tr>
+{% endif %}
+
+<tr class="total-row">
+<td>Total</td>
+<td>{{booking.total_price}}</td>
+</tr>
+
+</table>
+
+</div>
+
+
+<!-- BUTTONS -->
+
+<div class="buttons">
+
+<a href="{% url 'home' %}" class="btn">Back To Home</a>
+
+<button onclick="downloadInvoice()" class="btn">Download Invoice</button>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+async function downloadInvoice() {
+
+    const { jsPDF } = window.jspdf;
+
+    const invoice = document.querySelector(".invoice-box");
+    const buttons = document.querySelector(".buttons");
+
+    // ❌ Hide buttons before capture
+    buttons.style.display = "none";
+
+    // Convert HTML to canvas
+    const canvas = await html2canvas(invoice, {
+        scale: 2
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+
+    // A4 size in mm
+    const pdf = new jsPDF('p', 'mm', 'a4');
+
+    const pageWidth = 210;
+    const pageHeight = 297;
+
+    const imgWidth = pageWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+    pdf.save("Casa_Lumière_Invoice.pdf");
+
+    // ✅ Show buttons again
+    buttons.style.display = "block";
+}
+</script>
+
+
+<!-- FOOTER -->
+
+<div class="invoice-footer">
+
+Thank you for choosing <b>Casa Lumière</b>.  
+We look forward to welcoming you again.
+
+</div>
+
+</div>
+
+</body>
+</html>

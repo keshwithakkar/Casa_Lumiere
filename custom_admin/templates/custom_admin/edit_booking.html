@@ -1,0 +1,68 @@
+{% extends 'custom_admin/base.html' %}
+
+{% block content %}
+
+<h1 style="color:#854f6c;">Edit Booking</h1>
+
+<form method="POST" class="admin-form">
+    {% csrf_token %}
+
+    <label>Guest</label>
+    <select name="guest" required>
+        {% for g in guests %}
+        <option value="{{ g.id }}" {% if booking.guest.id == g.id %}selected{% endif %}>{{ g.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Room</label>
+    <select name="room" required>
+        {% for r in rooms %}
+        <option value="{{ r.id }}" {% if booking.room.id == r.id %}selected{% endif %}>{{ r.room_type }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Check-In</label>
+    <input type="date" name="check_in" value="{{ booking.check_in|date:'Y-m-d' }}" required>
+
+    <label>Check-Out</label>
+    <input type="date" name="check_out" value="{{ booking.check_out|date:'Y-m-d' }}" required>
+
+    <label>Adults</label>
+    <input type="number" name="adults" min="1" value="{{ booking.adults }}" required>
+
+    <label>Children</label>
+    <input type="number" name="children" min="0" value="{{ booking.children }}">
+
+    <label>Rooms Booked</label>
+    <input type="number" name="rooms_booked" min="1" value="{{ booking.rooms_booked }}" required>
+
+    <label>Room Price</label>
+    <input type="number" name="room_price" step="0.01" value="{{ booking.room_price }}" required>
+
+    <label>Extra Guest Price</label>
+    <input type="number" name="extra_guest_price" step="0.01" value="{{ booking.extra_guest_price }}">
+
+    <label>Tax Price</label>
+    <input type="number" name="tax_price" step="0.01" value="{{ booking.tax_price }}" required>
+
+    <label>Discount Price</label>
+    <input type="number" name="discount_price" step="0.01" value="{{ booking.discount_price }}">
+
+    <label>Total Price</label>
+    <input type="number" name="total_price" step="0.01" value="{{ booking.total_price }}" required>
+
+    <label>Coupon Code</label>
+    <input type="text" name="coupon_code" value="{{ booking.coupon_code }}">
+
+    <label>Status</label>
+    <select name="booking_status">
+        <option value="Confirmed" {% if booking.booking_status == "Confirmed" %}selected{% endif %}>Confirmed</option>
+        <option value="Cancelled" {% if booking.booking_status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+        <option value="Completed" {% if booking.booking_status == "Completed" %}selected{% endif %}>Completed</option>
+    </select><br>
+
+    <button type="submit" class="btn-add">Edit Booking</button>
+    <a href="{% url 'admin_bookings' %}" class="btn-cancel">Cancel</a>
+</form>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'custom_admin/base.html' %}
+{% block content %}
+
+<h1 style="color:#854f6c;">Edit Contact Us</h1>
+
+<form method="POST" class="admin-form">
+    {% csrf_token %}
+
+    <label>Hotel Contact Description</label>
+    <textarea name="description" rows="6" required>{{ contact.description }}</textarea>
+
+    <button type="submit" class="btn-add">Save</button>
+    <a href="{% url 'admin_contactus' %}" class="btn-cancel">Cancel</a>
+</form>
+
+{% endblock %}
